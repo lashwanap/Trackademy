@@ -1,10 +1,214 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trackademy • Calendrier</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-$END$
+
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar('calendrier')}"></div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="page-header">
+        <div>
+            <div class="topbar-title">📅 Calendrier</div>
+            <div class="topbar-sub">Gérez vos événements et échéances</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modalEvt')">
+            + Ajouter un événement
+        </button>
+    </div>
+
+    <!-- LAYOUT CALENDRIER + SIDEBAR ÉVÉNEMENTS -->
+    <div class="calendrier-layout">
+
+        <!-- CALENDRIER -->
+        <div class="calendar-box">
+            <div class="calendar-nav">
+                <a th:href="@{/calendrier(annee=${mois == 1 ? annee - 1 : annee}, mois=${mois == 1 ? 12 : mois - 1})}"
+                   class="cal-nav-btn">&#8249;</a>
+                <h3 id="monthTitle">Chargement...</h3>
+                <a th:href="@{/calendrier(annee=${mois == 12 ? annee + 1 : annee}, mois=${mois == 12 ? 1 : mois + 1})}"
+                   class="cal-nav-btn">&#8250;</a>
+            </div>
+
+            <div class="weekdays">
+                <div>Lun</div><div>Mar</div><div>Mer</div>
+                <div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
+            </div>
+
+            <div class="calendar-days" id="calGrid"></div>
+        </div>
+
+        <!-- SIDEBAR ÉVÉNEMENTS DU MOIS -->
+        <div class="events-sidebar-panel">
+            <div class="panel-header">
+                <span class="panel-title">Événements du mois</span>
+            </div>
+
+            <div th:if="${#lists.isEmpty(evenements)}">
+                <div class="empty-state" style="padding:30px 0;">
+                    <span class="empty-icon" style="font-size:32px;">🗓</span>
+                    <p style="font-size:13px;">Aucun événement ce mois</p>
+                </div>
+            </div>
+
+            <div th:each="evt : ${evenements}" class="event-item">
+                <div class="event-dot" th:classappend="${evt.type}"></div>
+                <div style="flex:1;">
+                    <div class="event-titre" th:text="${evt.titre}">Événement</div>
+                    <div class="event-date" th:text="${#temporals.format(evt.date, 'd MMM yyyy')}">Date</div>
+                </div>
+                <form th:action="@{/calendrier/delete/{id}(id=${evt.id})}" method="post">
+                    <input type="hidden" name="annee" th:value="${annee}">
+                    <input type="hidden" name="mois"  th:value="${mois}">
+                    <button type="submit" class="btn btn-danger btn-icon btn-sm" title="Supprimer">x</button>
+                </form>
+            </div>
+
+            <!-- Légende -->
+            <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:16px;">
+                <div style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Légende</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--danger);display:inline-block;"></span> Examen
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--warning);display:inline-block;"></span> Devoir
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--success);display:inline-block;"></span> Cours
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--info);display:inline-block;"></span> Autre
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- MODAL AJOUTER ÉVÉNEMENT -->
+<div class="modal-backdrop" id="modalEvt">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Nouvel événement</h3>
+            <button class="modal-close" onclick="closeModal('modalEvt')">x</button>
+        </div>
+        <form th:action="@{/calendrier/add}" method="post">
+            <div class="form-group">
+                <label class="form-label">Titre *</label>
+                <input type="text" name="titre" class="form-control" placeholder="ex: Examen de Java" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Date *</label>
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select name="type" class="form-control">
+                        <option value="EXAMEN">Examen</option>
+                        <option value="DEVOIR">Devoir</option>
+                        <option value="COURS">Cours</option>
+                        <option value="AUTRE">Autre</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="2" placeholder="Notes..."></textarea>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+                <button type="button" class="btn btn-outline" onclick="closeModal('modalEvt')">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const anneeServeur = /*[[${annee}]]*/ 2024;
+    const moisServeur  = /*[[${mois}]]*/ 1;
+    const evenementsServeur = /*[[${evenements}]]*/ [];
+</script>
+
+<script>
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', e => { if (e.target === b) b.classList.remove('open'); });
+    });
+
+    function buildCalendar(annee, mois) {
+        const grid  = document.getElementById('calGrid');
+        const title = document.getElementById('monthTitle');
+        const today = new Date();
+        const firstDay = new Date(annee, mois - 1, 1);
+        const lastDay  = new Date(annee, mois, 0);
+
+        title.textContent = firstDay.toLocaleString('fr-FR', { month: 'long', year: 'numeric' });
+        grid.innerHTML = '';
+
+        let startDow = firstDay.getDay();
+        if (startDow === 0) startDow = 7;
+        for (let i = 1; i < startDow; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'cal-day';
+            grid.appendChild(empty);
+        }
+
+        // Map événements par jour
+        const evtMap = {};
+        if (Array.isArray(evenementsServeur)) {
+            evenementsServeur.forEach(e => {
+                if (e && e.date) {
+                    let day;
+                    if (Array.isArray(e.date)) {
+                        day = parseInt(e.date[2]);
+                    } else if (typeof e.date === 'string') {
+                        day = parseInt(e.date.split('-')[2]);
+                    }
+                    if (day) {
+                        if (!evtMap[day]) evtMap[day] = [];
+                        evtMap[day].push(e);
+                    }
+                }
+            });
+        }
+
+        for (let d = 1; d <= lastDay.getDate(); d++) {
+            const cell = document.createElement('div');
+            cell.className = 'cal-day';
+            const isToday = d === today.getDate() && (mois - 1) === today.getMonth() && annee === today.getFullYear();
+            if (isToday) cell.classList.add('today');
+
+            const numEl = document.createElement('div');
+            numEl.className = 'day-num';
+            numEl.textContent = d;
+            cell.appendChild(numEl);
+
+            if (evtMap[d]) {
+                evtMap[d].forEach(evt => {
+                    const evtEl = document.createElement('div');
+                    evtEl.className = 'cal-event ' + (evt.type || 'AUTRE');
+                    evtEl.textContent = evt.titre || '';
+                    cell.appendChild(evtEl);
+                });
+            }
+            grid.appendChild(cell);
+        }
+    }
+
+    buildCalendar(anneeServeur, moisServeur);
+</script>
+
 </body>
 </html>

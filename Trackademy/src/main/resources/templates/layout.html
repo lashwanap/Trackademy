@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(content)">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>StudyTrack</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
-$END$
+
+<!-- SIDEBAR -->
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
+<!-- CONTENU VARIABLE -->
+<main class="content">
+    <div th:replace="${content}"></div>
+</main>
+
 </body>
 </html>

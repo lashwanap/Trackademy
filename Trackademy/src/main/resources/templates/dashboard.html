@@ -1,102 +1,202 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trackademy • Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <!-- SIDEBAR -->
-<aside class="sidebar">
-    <div>
-        <h1>Trackademy</h1>
-        <ul class="menu">
-            <li><a href="#" class="active">Dashboard</a></li>
-            <li><a href="#">Cours</a></li>
-            <li><a href="#">Devoirs</a></li>
-            <li><a href="#">Calendrier</a></li>
-            <li><a href="#">Statistiques</a></li>
-            <li><a href="#">Paramètres</a></li>
-        </ul>
-    </div>
-    <div class="sidebar-bottom">
-        <img src="https://via.placeholder.com/80" alt="Photo profil">
-        <span class="name">Lashwana</span>
-        <span class="role">Étudiante</span>
-    </div>
-</aside>
+<div th:replace="~{fragments/sidebar :: sidebar('dashboard')}"></div>
 
-<!-- MAIN CONTENT -->
-<div class="main-content">
+<!-- MAIN -->
+<main class="main-content">
 
-    <div class="dashboard">
-
-        <div class="topbar">
-            <div class="search-container">
-                <input type="text" placeholder="Rechercher un cours, devoir..." />
-            </div>
-
-            <div class="profile-container">
-                <span class="notification">🔔</span>
-                <img src="https://i.pravatar.cc/40" alt="Photo profil" class="profile-pic">
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div>
+            <div class="topbar-title">Bonjour, Lashwana 👋</div>
+            <div class="topbar-sub" th:text="'Aujourd\'hui, ' + ${dateAujourdhui}">Aujourd'hui</div>
+        </div>
+        <div class="topbar-right">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Rechercher...">
             </div>
         </div>
-
-        <div class="content">
-            <h1>Bonjour Emma 👋</h1>
-            <!-- Cartes stats ici -->
-        </div>
-
     </div>
 
+    <!-- DEUX COLONNES : main + side -->
+    <div class="dash-layout">
 
-    <!-- STAT CARDS -->
-    <div class="stats-grid">
-        <div class="card">
-            <div class="card-title">Cours actifs</div>
-            <div class="card-value">4</div>
-        </div>
+        <!-- COLONNE PRINCIPALE -->
+        <div class="dash-main">
 
-        <div class="card">
-            <div class="card-title">Moyenne générale</div>
-            <div class="card-value positive">87%</div>
-        </div>
+            <!-- CARTE PROFIL -->
+            <div class="profile-card">
+                <img class="profile-avatar"
+                     src="https://i.pravatar.cc/160?img=47"
+                     alt="Photo de profil">
+                <div class="profile-info">
+                    <div class="p-name">
+                        Lashwana Elamba
+                        <a href="#" class="edit-btn">✏ Modifier</a>
+                    </div>
+                    <div class="profile-grid">
+                        <div class="profile-field">
+                            <span class="f-label">Programme</span>
+                            <span class="f-value">Techniques de l'informatique</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="f-label">Session</span>
+                            <span class="f-value">Hiver 2026</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="f-label">Cours actifs</span>
+                            <span class="f-value" th:text="${nbCours} + ' cours'">0 cours</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="f-label">Devoirs en attente</span>
+                            <span class="f-value" th:text="${nbDevoirs} + ' devoir(s)'">0 devoir(s)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="card">
-            <div class="card-title">Devoirs à venir</div>
-            <div class="card-value warning">3</div>
-        </div>
+            <!-- STAT CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card c-yellow">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-label">Cours actifs</div>
+                    <div class="stat-value" th:text="${nbCours}">0</div>
+                    <div class="stat-sub">ce semestre</div>
+                </div>
 
-        <div class="card">
-            <div class="card-title">Prochain examen</div>
-            <div class="card-value danger">20 Févr.</div>
-        </div>
-    </div>
+                <div class="stat-card c-red">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-label">Devoirs à rendre</div>
+                    <div class="stat-value" th:text="${nbDevoirs}">0</div>
+                    <div class="stat-sub">non terminés</div>
+                </div>
 
-    <!-- PROCHAINS DEVOIRS -->
-    <div class="section">
-        <h3>Prochains devoirs</h3>
+                <div class="stat-card c-green">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-label">Solde disponible</div>
+                    <div class="stat-value"
+                         th:text="${#numbers.formatDecimal(solde, 1, 2)} + ' $'">0,00 $</div>
+                    <div class="stat-sub">ce mois-ci</div>
+                </div>
 
-        <div class="list-item">
-            <span>Projet Spring Boot</span>
-            <span class="badge project">15 Mars</span>
-        </div>
+                <div class="stat-card c-orange">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-label">Calendrier</div>
+                    <div class="stat-value">
+                        <a th:href="@{/calendrier}"
+                           style="color:inherit;text-decoration:none;font-size:16px;font-weight:700;">
+                            Voir →
+                        </a>
+                    </div>
+                    <div class="stat-sub">planifier vos échéances</div>
+                </div>
+            </div>
 
-        <div class="list-item">
-            <span>Examen Python</span>
-            <span class="badge exam">20 Févr.</span>
-        </div>
+            <!-- PROCHAINS DEVOIRS — timeline -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">📝 Prochains devoirs</span>
+                    <a th:href="@{/devoirs}" class="panel-link">Tout voir →</a>
+                </div>
 
-        <div class="list-item">
-            <span>Modélisation UML</span>
-            <span class="badge assignment">25 Févr.</span>
-        </div>
+                <div th:if="${#lists.isEmpty(prochainDevoirs)}" class="empty-state">
+                    <span class="empty-icon">🎉</span>
+                    <p>Aucun devoir en attente !</p>
+                </div>
 
-    </div>
+                <div class="timeline-list" th:if="${!#lists.isEmpty(prochainDevoirs)}">
+                    <div class="timeline-item" th:each="d : ${prochainDevoirs}">
+                        <span class="timeline-dot"
+                              th:classappend="${d.statut == 'TERMINE'} ? 'done' : (${d.statut == 'EN_COURS'} ? 'inprogress' : '')">
+                        </span>
+                        <div class="timeline-content">
+                            <div class="timeline-title" th:text="${d.titre}">Titre</div>
+                            <div class="timeline-sub"
+                                 th:text="${d.cours != null ? d.cours.nom : 'Sans cours'} + (${d.dateRemise != null ? ' · ' + #temporals.format(d.dateRemise, 'd MMM yyyy') : ''})">
+                            </div>
+                        </div>
+                        <div class="timeline-right">
+                            <span th:if="${d.statut == 'PLANIFIE'}"  class="badge badge-yellow">À faire</span>
+                            <span th:if="${d.statut == 'EN_COURS'}"  class="badge badge-orange">En cours</span>
+                            <span th:if="${d.statut == 'TERMINE'}"   class="badge badge-green">Terminé</span>
+                            <a th:href="@{/devoirs}"
+                               th:classappend="${d.statut == 'TERMINE'} ? 'done'"
+                               class="timeline-arrow">→</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-</div>
+        </div><!-- /dash-main -->
+
+        <!-- COLONNE LATÉRALE -->
+        <div class="dash-side">
+
+            <!-- BUDGET RÉSUMÉ -->
+            <div class="budget-side-card">
+                <div class="budget-side-title">💰 Mon budget</div>
+                <div class="bsc-row">
+                    <span class="bsc-label">Solde actuel</span>
+                    <span class="bsc-value pos" th:classappend="${solde < 0} ? 'neg'"
+                          th:text="${#numbers.formatDecimal(solde, 1, 2)} + ' $'">0,00 $</span>
+                </div>
+                <div class="bsc-row">
+                    <span class="bsc-label">Objectif mensuel</span>
+                    <span class="bsc-value">500,00 $</span>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-bar"
+                         th:classappend="${solde < 0} ? 'danger'"
+                         th:style="'width:' + ${#numbers.formatDecimal(T(java.lang.Math).min(T(java.lang.Math).max(solde / 500.0 * 100, 0), 100), 1, 0)} + '%'">
+                    </div>
+                </div>
+                <div style="margin-top:14px;">
+                    <a th:href="@{/budget}" class="btn btn-primary" style="width:100%;justify-content:center;">
+                        Gérer mon budget
+                    </a>
+                </div>
+            </div>
+
+            <!-- NAVIGATION RAPIDE -->
+            <div class="quick-nav-card">
+                <div class="qn-title">Navigation rapide</div>
+                <a th:href="@{/cours}" class="qn-link">
+                    <span class="qn-icon">📚</span>
+                    Mes cours
+                    <span class="qn-arrow">→</span>
+                </a>
+                <a th:href="@{/devoirs}" class="qn-link">
+                    <span class="qn-icon">📝</span>
+                    Mes devoirs
+                    <span class="qn-arrow">→</span>
+                </a>
+                <a th:href="@{/calendrier}" class="qn-link">
+                    <span class="qn-icon">📅</span>
+                    Calendrier
+                    <span class="qn-arrow">→</span>
+                </a>
+                <a th:href="@{/budget}" class="qn-link">
+                    <span class="qn-icon">💰</span>
+                    Budget
+                    <span class="qn-arrow">→</span>
+                </a>
+            </div>
+
+        </div><!-- /dash-side -->
+
+    </div><!-- /dash-layout -->
+
+</main>
 
 </body>
 </html>

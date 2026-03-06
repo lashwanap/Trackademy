@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trackademy • Devoirs</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar('devoirs')}"></div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="page-header">
+        <div>
+            <div class="topbar-title">📝 Mes devoirs</div>
+            <div class="topbar-sub" th:text="${#lists.size(devoirs)} + ' devoirs au total'">0 devoirs</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modalDevoir')">
+            + Ajouter un devoir
+        </button>
+    </div>
+
+    <!-- FILTRES -->
+    <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+        <button class="btn btn-dark btn-sm filtre-btn active-filtre" onclick="filtrer('tous', this)">Tous</button>
+        <button class="btn btn-outline btn-sm filtre-btn" onclick="filtrer('PLANIFIE', this)">📋 À faire</button>
+        <button class="btn btn-outline btn-sm filtre-btn" onclick="filtrer('EN_COURS', this)">⏳ En cours</button>
+        <button class="btn btn-outline btn-sm filtre-btn" onclick="filtrer('TERMINE', this)">✅ Terminés</button>
+    </div>
+
+    <!-- LISTE DES DEVOIRS -->
+    <div th:if="${#lists.isEmpty(devoirs)}" class="panel">
+        <div class="empty-state">
+            <span class="empty-icon">🎉</span>
+            <p>Aucun devoir pour l'instant. Profites-en !</p>
+            <button class="btn btn-primary" style="margin-top:20px;" onclick="openModal('modalDevoir')">
+                + Ajouter un devoir
+            </button>
+        </div>
+    </div>
+
+    <div id="devoirs-list">
+        <div class="devoir-item"
+             th:each="d : ${devoirs}"
+             th:classappend="'statut-' + ${d.statut}"
+             th:attr="data-statut=${d.statut}">
+
+            <div class="devoir-info">
+                <div class="devoir-title" th:text="${d.titre}">Titre du devoir</div>
+                <div class="devoir-cours-name"
+                     th:text="${d.cours != null} ? '📚 ' + ${d.cours.nom} : '📚 Sans cours'">Cours</div>
+            </div>
+
+            <div class="devoir-right">
+                <div class="devoir-date" th:if="${d.dateRemise != null}">
+                    <div class="devoir-date-label">À remettre</div>
+                    <div th:text="${#temporals.format(d.dateRemise, 'd MMM yyyy')}">Date</div>
+                </div>
+
+                <!-- Badge statut -->
+                <span th:if="${d.statut == 'PLANIFIE'}"  class="badge badge-yellow">À faire</span>
+                <span th:if="${d.statut == 'EN_COURS'}"  class="badge badge-orange">En cours</span>
+                <span th:if="${d.statut == 'TERMINE'}"   class="badge badge-green">Terminé</span>
+
+                <!-- Changer statut -->
+                <form th:action="@{/devoirs/statut/{id}(id=${d.id})}" method="post">
+                    <select name="statut" class="form-control"
+                            style="padding:5px 8px;font-size:12px;width:auto;"
+                            onchange="this.form.submit()">
+                        <option value="PLANIFIE"  th:selected="${d.statut == 'PLANIFIE'}">📋 À faire</option>
+                        <option value="EN_COURS"  th:selected="${d.statut == 'EN_COURS'}">⏳ En cours</option>
+                        <option value="TERMINE"   th:selected="${d.statut == 'TERMINE'}">✅ Terminé</option>
+                    </select>
+                </form>
+
+                <!-- Supprimer -->
+                <form th:action="@{/devoirs/delete/{id}(id=${d.id})}" method="post"
+                      onsubmit="return confirm('Supprimer ce devoir ?')">
+                    <button type="submit" class="btn btn-danger btn-icon btn-sm" title="Supprimer">🗑</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- MODAL AJOUTER DEVOIR -->
+<div class="modal-backdrop" id="modalDevoir">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>➕ Nouveau devoir</h3>
+            <button class="modal-close" onclick="closeModal('modalDevoir')">✕</button>
+        </div>
+        <form th:action="@{/devoirs/add}" method="post">
+            <div class="form-group">
+                <label class="form-label">Titre du devoir *</label>
+                <input type="text" name="titre" class="form-control" placeholder="ex: Examen Python" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Cours associé</label>
+                <select name="coursId" class="form-control">
+                    <option value="">-- Sélectionner un cours --</option>
+                    <option th:each="c : ${cours}" th:value="${c.id}" th:text="${c.nom}">Cours</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Date de remise</label>
+                    <input type="date" name="dateRemise" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Statut</label>
+                    <select name="statut" class="form-control">
+                        <option value="PLANIFIE">📋 À faire</option>
+                        <option value="EN_COURS">⏳ En cours</option>
+                        <option value="TERMINE">✅ Terminé</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description / Notes</label>
+                <textarea name="description" class="form-control" rows="3"
+                          placeholder="Notes sur ce devoir..."></textarea>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+                <button type="button" class="btn btn-outline" onclick="closeModal('modalDevoir')">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', e => { if (e.target === b) b.classList.remove('open'); });
+    });
+
+    function filtrer(statut, btn) {
+        document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active-filtre', 'btn-dark'));
+        document.querySelectorAll('.filtre-btn').forEach(b => b.classList.add('btn-outline'));
+        btn.classList.remove('btn-outline');
+        btn.classList.add('btn-dark', 'active-filtre');
+
+        document.querySelectorAll('.devoir-item').forEach(item => {
+            if (statut === 'tous' || item.dataset.statut === statut) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

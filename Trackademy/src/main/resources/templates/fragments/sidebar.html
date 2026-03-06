@@ -1,31 +1,71 @@
-<aside class="sidebar" th:fragment="sidebar">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="sidebar" th:fragment="sidebar(activePage)">
 
-  <!-- HAUT : LOGO / APP -->
-  <div class="sidebar-top">
-    <h1>StudyTrack</h1>
-  </div>
-
-  <!-- MILIEU : MENU -->
-  <div class="sidebar-middle">
-    <ul class="menu">
-      <li><a href="#">Dashboard</a></li>
-      <li><a href="#">Cours</a></li>
-      <li><a href="#">Devoirs</a></li>
-      <li><a href="calendrier">Calendrier</a></li>
-      <li><a href="#">Statistiques</a></li>
-      <li><a href="#">Paramètres</a></li>
-    </ul>
-    <a class="logout">Deconnexion</a>
-  </div>
-
-
-  <!-- BAS : PROFIL -->
-  <div class="sidebar-bottom">
-    <img src="https://via.placeholder.com/80" alt="Photo profil">
-    <div class="user-info">
-      <span class="name">Lashwana</span>
-      <span class="role">Étudiante</span>
+    <!-- Logo -->
+    <div class="sidebar-logo">
+        <div class="logo-text">Trackademy</div>
+        <span class="logo-sub">Espace étudiant</span>
     </div>
-  </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+        <span class="nav-section">Principal</span>
+        <ul>
+            <li>
+                <a th:href="@{/}" th:classappend="${activePage == 'dashboard'} ? 'active'">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label-text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/cours}" th:classappend="${activePage == 'cours'} ? 'active'">
+                    <span class="nav-icon">📚</span>
+                    <span class="nav-label-text">Mes cours</span>
+                    <span class="nav-badge" th:if="${sidebarNbCours != null and sidebarNbCours > 0}"
+                          th:text="${sidebarNbCours}">0</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/devoirs}" th:classappend="${activePage == 'devoirs'} ? 'active'">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-label-text">Devoirs</span>
+                    <span class="nav-badge" th:if="${sidebarNbDevoirs != null and sidebarNbDevoirs > 0}"
+                          th:text="${sidebarNbDevoirs}">0</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/calendrier}" th:classappend="${activePage == 'calendrier'} ? 'active'">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label-text">Calendrier</span>
+                </a>
+            </li>
+        </ul>
+
+        <span class="nav-section">Finances</span>
+        <ul>
+            <li>
+                <a th:href="@{/budget}" th:classappend="${activePage == 'budget'} ? 'active'">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-label-text">Budget</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Illustration décorative -->
+    <div class="sidebar-deco">🎓</div>
+
+    <!-- Profil -->
+    <div class="sidebar-profile">
+        <img src="https://i.pravatar.cc/80?img=47" alt="Photo profil">
+        <div>
+            <span class="profile-name">Lashwana</span>
+            <span class="profile-role">Étudiante</span>
+        </div>
+    </div>
 
 </aside>
+</body>
+</html>

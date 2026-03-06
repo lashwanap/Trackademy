@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trackademy • Mes cours</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar('cours')}"></div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="page-header">
+        <div>
+            <div class="topbar-title">📚 Mes cours</div>
+            <div class="topbar-sub"
+                 th:text="${#lists.size(cours)} + ' cours ce semestre'">0 cours</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modalCours')">
+            + Ajouter un cours
+        </button>
+    </div>
+
+    <!-- ÉTAT VIDE -->
+    <div th:if="${#lists.isEmpty(cours)}" class="panel">
+        <div class="empty-state">
+            <span class="empty-icon">📖</span>
+            <p>Tu n'as encore aucun cours. Ajoute ton premier cours !</p>
+            <button class="btn btn-primary" style="margin-top:20px;"
+                    onclick="openModal('modalCours')">
+                + Ajouter un cours
+            </button>
+        </div>
+    </div>
+
+    <!-- LISTE TIMELINE DES COURS -->
+    <div class="panel" th:if="${!#lists.isEmpty(cours)}">
+        <div class="timeline-list">
+            <div class="timeline-item" th:each="c : ${cours}">
+                <!-- Dot coloré selon la couleur du cours -->
+                <span class="timeline-dot"
+                      th:style="'background:' + (${c.couleur != null} ? ${c.couleur} : '#FFD60A') + '; box-shadow: 0 0 0 2px ' + (${c.couleur != null} ? ${c.couleur} : '#FFD60A')">
+                </span>
+
+                <!-- Contenu -->
+                <div class="timeline-content">
+                    <div class="timeline-title" th:text="${c.nom}">Nom du cours</div>
+                    <div class="timeline-sub">
+                        <span th:if="${c.professeur != null and !c.professeur.isEmpty()}"
+                              th:text="'Prof. ' + ${c.professeur}"></span>
+                        <span th:if="${c.horaire != null and !c.horaire.isEmpty()}"
+                              th:text="' · 🕐 ' + ${c.horaire}"></span>
+                        <span th:if="${c.salle != null and !c.salle.isEmpty()}"
+                              th:text="' · 📍 ' + ${c.salle}"></span>
+                    </div>
+                </div>
+
+                <!-- Droite : crédits + supprimer -->
+                <div class="timeline-right">
+                    <span class="badge badge-dark"
+                          th:if="${c.credits > 0}"
+                          th:text="${c.credits} + ' cr.'">cr.</span>
+                    <form th:action="@{/cours/delete/{id}(id=${c.id})}" method="post"
+                          onsubmit="return confirm('Supprimer ce cours ?')">
+                        <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- MODAL AJOUTER COURS -->
+<div class="modal-backdrop" id="modalCours">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>➕ Nouveau cours</h3>
+            <button class="modal-close" onclick="closeModal('modalCours')">✕</button>
+        </div>
+        <form th:action="@{/cours/add}" method="post">
+            <div class="form-group">
+                <label class="form-label">Nom du cours *</label>
+                <input type="text" name="nom" class="form-control"
+                       placeholder="ex: Programmation Web" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Professeur</label>
+                <input type="text" name="professeur" class="form-control"
+                       placeholder="ex: M. Tremblay">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Horaire</label>
+                    <input type="text" name="horaire" class="form-control"
+                           placeholder="ex: Lun 9h-12h">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Salle</label>
+                    <input type="text" name="salle" class="form-control"
+                           placeholder="ex: C-200">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Crédits</label>
+                    <input type="number" name="credits" class="form-control"
+                           placeholder="ex: 3" min="0" max="9">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Couleur</label>
+                    <input type="color" name="couleur" class="form-control"
+                           value="#FFD60A" style="height:44px;padding:4px 8px;cursor:pointer;">
+                </div>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+                <button type="button" class="btn btn-outline"
+                        onclick="closeModal('modalCours')">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal(id)  { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', e => { if (e.target === b) b.classList.remove('open'); });
+    });
+</script>
+
+</body>
+</html>
