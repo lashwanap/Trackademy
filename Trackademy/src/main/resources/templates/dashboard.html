@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Trackademy • Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div>
+        <h1>Trackademy</h1>
+        <ul class="menu">
+            <li><a href="#" class="active">Dashboard</a></li>
+            <li><a href="#">Cours</a></li>
+            <li><a href="#">Devoirs</a></li>
+            <li><a href="#">Calendrier</a></li>
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="#">Paramètres</a></li>
+        </ul>
+    </div>
+    <div class="sidebar-bottom">
+        <img src="https://via.placeholder.com/80" alt="Photo profil">
+        <span class="name">Lashwana</span>
+        <span class="role">Étudiante</span>
+    </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <div class="dashboard">
+
+        <div class="topbar">
+            <div class="search-container">
+                <input type="text" placeholder="Rechercher un cours, devoir..." />
+            </div>
+
+            <div class="profile-container">
+                <span class="notification">🔔</span>
+                <img src="https://i.pravatar.cc/40" alt="Photo profil" class="profile-pic">
+            </div>
+        </div>
+
+        <div class="content">
+            <h1>Bonjour Emma 👋</h1>
+            <!-- Cartes stats ici -->
+        </div>
+
+    </div>
+
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+        <div class="card">
+            <div class="card-title">Cours actifs</div>
+            <div class="card-value">4</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Moyenne générale</div>
+            <div class="card-value positive">87%</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Devoirs à venir</div>
+            <div class="card-value warning">3</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Prochain examen</div>
+            <div class="card-value danger">20 Févr.</div>
+        </div>
+    </div>
+
+    <!-- PROCHAINS DEVOIRS -->
+    <div class="section">
+        <h3>Prochains devoirs</h3>
+
+        <div class="list-item">
+            <span>Projet Spring Boot</span>
+            <span class="badge project">15 Mars</span>
+        </div>
+
+        <div class="list-item">
+            <span>Examen Python</span>
+            <span class="badge exam">20 Févr.</span>
+        </div>
+
+        <div class="list-item">
+            <span>Modélisation UML</span>
+            <span class="badge assignment">25 Févr.</span>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
