@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -30,7 +31,14 @@ public class HomeController {
         model.addAttribute("nbCours", coursService.count());
         model.addAttribute("nbDevoirs", devoirService.countPending());
         model.addAttribute("prochainDevoirs", devoirService.findPending());
-        model.addAttribute("solde", budgetService.solde());
+        BigDecimal solde = budgetService.solde();
+        model.addAttribute("solde", solde);
+
+        // Pourcentage pour la barre de progression (objectif 500 $)
+        double pct = solde.doubleValue() / 500.0 * 100.0;
+        if (pct < 0)   pct = 0;
+        if (pct > 100) pct = 100;
+        model.addAttribute("budgetPourcent", (int) pct);
 
         // Date formattée pour le dashboard
         String dateAujourdhui = LocalDate.now()

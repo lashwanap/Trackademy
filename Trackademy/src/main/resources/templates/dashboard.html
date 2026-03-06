@@ -116,13 +116,14 @@
 
                 <div class="timeline-list" th:if="${!#lists.isEmpty(prochainDevoirs)}">
                     <div class="timeline-item" th:each="d : ${prochainDevoirs}">
+                        <!-- Dot : couleur selon statut -->
                         <span class="timeline-dot"
-                              th:classappend="${d.statut == 'TERMINE'} ? 'done' : (${d.statut == 'EN_COURS'} ? 'inprogress' : '')">
+                              th:classappend="${d.statut == 'TERMINE' ? 'done' : (d.statut == 'EN_COURS' ? 'inprogress' : '')}">
                         </span>
                         <div class="timeline-content">
                             <div class="timeline-title" th:text="${d.titre}">Titre</div>
                             <div class="timeline-sub"
-                                 th:text="${d.cours != null ? d.cours.nom : 'Sans cours'} + (${d.dateRemise != null ? ' · ' + #temporals.format(d.dateRemise, 'd MMM yyyy') : ''})">
+                                 th:text="${(d.cours != null ? d.cours.nom : 'Sans cours') + (d.dateRemise != null ? ' · ' + #temporals.format(d.dateRemise, 'd MMM yyyy') : '')}">
                             </div>
                         </div>
                         <div class="timeline-right">
@@ -130,7 +131,7 @@
                             <span th:if="${d.statut == 'EN_COURS'}"  class="badge badge-orange">En cours</span>
                             <span th:if="${d.statut == 'TERMINE'}"   class="badge badge-green">Terminé</span>
                             <a th:href="@{/devoirs}"
-                               th:classappend="${d.statut == 'TERMINE'} ? 'done'"
+                               th:classappend="${d.statut == 'TERMINE' ? 'done' : ''}"
                                class="timeline-arrow">→</a>
                         </div>
                     </div>
@@ -147,7 +148,8 @@
                 <div class="budget-side-title">💰 Mon budget</div>
                 <div class="bsc-row">
                     <span class="bsc-label">Solde actuel</span>
-                    <span class="bsc-value pos" th:classappend="${solde < 0} ? 'neg'"
+                    <span class="bsc-value"
+                          th:classappend="${solde.signum() >= 0 ? 'pos' : 'neg'}"
                           th:text="${#numbers.formatDecimal(solde, 1, 2)} + ' $'">0,00 $</span>
                 </div>
                 <div class="bsc-row">
@@ -156,12 +158,13 @@
                 </div>
                 <div class="progress-wrap">
                     <div class="progress-bar"
-                         th:classappend="${solde < 0} ? 'danger'"
-                         th:style="'width:' + ${#numbers.formatDecimal(T(java.lang.Math).min(T(java.lang.Math).max(solde / 500.0 * 100, 0), 100), 1, 0)} + '%'">
+                         th:classappend="${solde.signum() < 0 ? 'danger' : ''}"
+                         th:style="'width:' + ${budgetPourcent} + '%'">
                     </div>
                 </div>
                 <div style="margin-top:14px;">
-                    <a th:href="@{/budget}" class="btn btn-primary" style="width:100%;justify-content:center;">
+                    <a th:href="@{/budget}" class="btn btn-primary"
+                       style="width:100%;justify-content:center;">
                         Gérer mon budget
                     </a>
                 </div>
