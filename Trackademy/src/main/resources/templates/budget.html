@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trackademy • Budget</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -14,29 +15,33 @@
 <!-- MAIN -->
 <main class="main-content">
 
-    <!-- TOPBAR -->
     <div class="page-header">
         <div>
-            <div class="topbar-title">💰 Gestion du budget</div>
+            <div class="topbar-title">
+                <i class="fa-solid fa-wallet"></i> Gestion du budget
+            </div>
             <div class="topbar-sub">Suivez vos revenus et dépenses</div>
         </div>
         <button class="btn btn-primary" onclick="openModal('modalTransaction')">
-            + Ajouter une transaction
+            <i class="fa-solid fa-plus"></i> Ajouter une transaction
         </button>
     </div>
 
     <!-- CARDS RÉSUMÉ -->
     <div class="budget-cards">
-
         <div class="budget-card">
-            <div class="budget-label">Revenus</div>
+            <div class="budget-label">
+                <i class="fa-solid fa-arrow-trend-up"></i> Revenus
+            </div>
             <div class="budget-amount positive"
                  th:text="${#numbers.formatDecimal(revenus, 1, 2)} + ' $'">0,00 $</div>
             <div class="budget-sub">Total entrant</div>
         </div>
 
         <div class="budget-card">
-            <div class="budget-label">Dépenses</div>
+            <div class="budget-label">
+                <i class="fa-solid fa-arrow-trend-down"></i> Dépenses
+            </div>
             <div class="budget-amount negative"
                  th:text="${#numbers.formatDecimal(depenses, 1, 2)} + ' $'">0,00 $</div>
             <div class="budget-sub">Total sortant</div>
@@ -45,32 +50,38 @@
                      th:classappend="${pourcentage >= 90} ? ' danger'"
                      th:style="'width:' + ${pourcentage} + '%'"></div>
             </div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:5px;"
+            <div style="font-size:12px;color:var(--muted);margin-top:5px;"
                  th:text="${pourcentage} + '% des revenus dépensés'">0% dépensés</div>
         </div>
 
         <div class="budget-card">
-            <div class="budget-label">Solde disponible</div>
+            <div class="budget-label">
+                <i class="fa-solid fa-scale-balanced"></i> Solde disponible
+            </div>
             <div class="budget-amount"
                  th:classappend="${solde.compareTo(T(java.math.BigDecimal).ZERO) >= 0} ? ' positive' : ' negative'"
                  th:text="${#numbers.formatDecimal(solde, 1, 2)} + ' $'">0,00 $</div>
-            <div class="budget-sub">Revenus - Dépenses</div>
+            <div class="budget-sub">Revenus − Dépenses</div>
         </div>
-
     </div>
 
-    <!-- LAYOUT : TABLE + FORMULAIRE RAPIDE -->
+    <!-- TABLE + FORMULAIRE RAPIDE -->
     <div class="budget-layout">
 
-        <!-- TABLE DES TRANSACTIONS -->
+        <!-- TABLE -->
         <div class="table-wrap">
             <div class="table-header">
-                <span class="table-title">Historique des transactions</span>
-                <span class="badge badge-gray" th:text="${#lists.size(transactions)} + ' transactions'">0</span>
+                <span class="table-title">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Historique des transactions
+                </span>
+                <span class="badge badge-gray"
+                      th:text="${#lists.size(transactions)} + ' transactions'">0</span>
             </div>
 
-            <div th:if="${#lists.isEmpty(transactions)}" style="padding:40px;text-align:center;color:var(--text-muted);">
-                <div style="font-size:36px;margin-bottom:12px;">💳</div>
+            <div th:if="${#lists.isEmpty(transactions)}"
+                 style="padding:40px;text-align:center;color:var(--muted);">
+                <i class="fa-solid fa-credit-card"
+                   style="font-size:36px;margin-bottom:12px;display:block;"></i>
                 <p>Aucune transaction pour l'instant.</p>
             </div>
 
@@ -92,20 +103,24 @@
                         <td>
                             <span class="cat-tag" th:text="${t.categorie}">Catégorie</span>
                         </td>
-                        <td style="color:var(--text-muted);"
-                            th:text="${t.date != null} ? ${#temporals.format(t.date, 'd MMM yyyy')} : '-'">Date</td>
+                        <td style="color:var(--muted);"
+                            th:text="${t.date != null} ? ${#temporals.format(t.date, 'd MMM yyyy')} : '-'">
+                            Date
+                        </td>
                         <td>
-                            <span th:if="${t.type == 'REVENU'}"
-                                  class="amount-pos"
-                                  th:text="'+ ' + ${#numbers.formatDecimal(t.montant, 1, 2)} + ' $'">+0 $</span>
-                            <span th:if="${t.type == 'DEPENSE'}"
-                                  class="amount-neg"
-                                  th:text="'- ' + ${#numbers.formatDecimal(t.montant, 1, 2)} + ' $'">-0 $</span>
+                            <span th:if="${t.type == 'REVENU'}" class="amount-pos"
+                                  th:text="'+ ' + ${#numbers.formatDecimal(t.montant, 1, 2)} + ' $'">
+                            </span>
+                            <span th:if="${t.type == 'DEPENSE'}" class="amount-neg"
+                                  th:text="'− ' + ${#numbers.formatDecimal(t.montant, 1, 2)} + ' $'">
+                            </span>
                         </td>
                         <td>
                             <form th:action="@{/budget/delete/{id}(id=${t.id})}" method="post"
                                   onsubmit="return confirm('Supprimer cette transaction ?')">
-                                <button type="submit" class="btn btn-danger btn-icon btn-sm">x</button>
+                                <button type="submit" class="btn btn-danger btn-icon btn-sm">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -115,30 +130,31 @@
 
         <!-- FORMULAIRE RAPIDE -->
         <div class="quick-form-panel">
-            <div class="quick-form-header">Ajouter une transaction</div>
+            <div class="quick-form-header">
+                <i class="fa-solid fa-plus"></i> Ajouter une transaction
+            </div>
             <div class="quick-form-body">
                 <form th:action="@{/budget/add}" method="post">
-
-                    <!-- Toggle Revenu / Dépense -->
                     <div class="type-toggle">
                         <input type="radio" name="type" id="typeRevenu" value="REVENU" checked>
-                        <label for="typeRevenu">Revenu</label>
+                        <label for="typeRevenu">
+                            <i class="fa-solid fa-arrow-trend-up"></i> Revenu
+                        </label>
                         <input type="radio" name="type" id="typeDepense" value="DEPENSE">
-                        <label for="typeDepense">Dépense</label>
+                        <label for="typeDepense">
+                            <i class="fa-solid fa-arrow-trend-down"></i> Dépense
+                        </label>
                     </div>
-
                     <div class="form-group">
                         <label class="form-label">Description *</label>
                         <input type="text" name="description" class="form-control"
                                placeholder="ex: Bourse d'études" required>
                     </div>
-
                     <div class="form-group">
                         <label class="form-label">Montant ($) *</label>
                         <input type="number" name="montant" class="form-control"
                                placeholder="0.00" min="0" step="0.01" required>
                     </div>
-
                     <div class="form-group">
                         <label class="form-label">Catégorie</label>
                         <select name="categorie" class="form-control">
@@ -153,29 +169,29 @@
                             <option value="Autre">Autre</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label class="form-label">Date</label>
                         <input type="date" name="date" class="form-control">
                     </div>
-
-                    <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
-                        Enregistrer
+                    <button type="submit" class="btn btn-primary"
+                            style="width:100%;justify-content:center;">
+                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer
                     </button>
                 </form>
             </div>
         </div>
-
     </div>
 
 </main>
 
-<!-- MODAL (version mobile) -->
+<!-- MODAL MOBILE -->
 <div class="modal-backdrop" id="modalTransaction">
     <div class="modal">
         <div class="modal-header">
-            <h3>Nouvelle transaction</h3>
-            <button class="modal-close" onclick="closeModal('modalTransaction')">x</button>
+            <h3><i class="fa-solid fa-plus"></i> Nouvelle transaction</h3>
+            <button class="modal-close" onclick="closeModal('modalTransaction')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
         <form th:action="@{/budget/add}" method="post">
             <div class="type-toggle" style="margin-bottom:20px;">
@@ -191,32 +207,34 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Montant *</label>
-                    <input type="number" name="montant" class="form-control" min="0" step="0.01" required>
+                    <input type="number" name="montant" class="form-control"
+                           min="0" step="0.01" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Date</label>
                     <input type="date" name="date" class="form-control">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Catégorie</label>
-                    <select name="categorie" class="form-control">
-                        <option value="Bourse">Bourse</option>
-                        <option value="Emploi">Emploi</option>
-                        <option value="Loyer">Loyer</option>
-                        <option value="Nourriture">Nourriture</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Études">Études</option>
-                        <option value="Loisirs">Loisirs</option>
-                        <option value="Santé">Santé</option>
-                        <option value="Autre">Autre</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label class="form-label">Catégorie</label>
+                <select name="categorie" class="form-control">
+                    <option value="Bourse">Bourse</option>
+                    <option value="Emploi">Emploi</option>
+                    <option value="Loyer">Loyer</option>
+                    <option value="Nourriture">Nourriture</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Études">Études</option>
+                    <option value="Loisirs">Loisirs</option>
+                    <option value="Santé">Santé</option>
+                    <option value="Autre">Autre</option>
+                </select>
             </div>
             <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
-                <button type="button" class="btn btn-outline" onclick="closeModal('modalTransaction')">Annuler</button>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-outline"
+                        onclick="closeModal('modalTransaction')">Annuler</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                </button>
             </div>
         </form>
     </div>

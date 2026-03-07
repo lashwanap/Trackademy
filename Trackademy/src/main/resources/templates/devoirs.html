@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trackademy • Devoirs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -14,36 +15,50 @@
 <!-- MAIN -->
 <main class="main-content">
 
-    <!-- TOPBAR -->
     <div class="page-header">
         <div>
-            <div class="topbar-title">📝 Mes devoirs</div>
-            <div class="topbar-sub" th:text="${#lists.size(devoirs)} + ' devoirs au total'">0 devoirs</div>
+            <div class="topbar-title">
+                <i class="fa-solid fa-pen-to-square"></i> Mes devoirs
+            </div>
+            <div class="topbar-sub"
+                 th:text="${#lists.size(devoirs)} + ' devoirs au total'">0 devoirs</div>
         </div>
         <button class="btn btn-primary" onclick="openModal('modalDevoir')">
-            + Ajouter un devoir
+            <i class="fa-solid fa-plus"></i> Ajouter un devoir
         </button>
     </div>
 
     <!-- FILTRES -->
     <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
-        <button class="btn btn-dark btn-sm filtre-btn active-filtre" onclick="filtrer('tous', this)">Tous</button>
-        <button class="btn btn-outline btn-sm filtre-btn" onclick="filtrer('PLANIFIE', this)">📋 À faire</button>
-        <button class="btn btn-outline btn-sm filtre-btn" onclick="filtrer('EN_COURS', this)">⏳ En cours</button>
-        <button class="btn btn-outline btn-sm filtre-btn" onclick="filtrer('TERMINE', this)">✅ Terminés</button>
+        <button class="btn btn-dark btn-sm filtre-btn active-filtre"
+                onclick="filtrer('tous', this)">Tous</button>
+        <button class="btn btn-outline btn-sm filtre-btn"
+                onclick="filtrer('PLANIFIE', this)">
+            <i class="fa-solid fa-clipboard-list"></i> À faire
+        </button>
+        <button class="btn btn-outline btn-sm filtre-btn"
+                onclick="filtrer('EN_COURS', this)">
+            <i class="fa-solid fa-hourglass-half"></i> En cours
+        </button>
+        <button class="btn btn-outline btn-sm filtre-btn"
+                onclick="filtrer('TERMINE', this)">
+            <i class="fa-solid fa-circle-check"></i> Terminés
+        </button>
     </div>
 
-    <!-- LISTE DES DEVOIRS -->
+    <!-- ÉTAT VIDE -->
     <div th:if="${#lists.isEmpty(devoirs)}" class="panel">
         <div class="empty-state">
-            <span class="empty-icon">🎉</span>
+            <i class="fa-solid fa-circle-check empty-icon"></i>
             <p>Aucun devoir pour l'instant. Profites-en !</p>
-            <button class="btn btn-primary" style="margin-top:20px;" onclick="openModal('modalDevoir')">
-                + Ajouter un devoir
+            <button class="btn btn-primary" style="margin-top:20px;"
+                    onclick="openModal('modalDevoir')">
+                <i class="fa-solid fa-plus"></i> Ajouter un devoir
             </button>
         </div>
     </div>
 
+    <!-- LISTE DES DEVOIRS -->
     <div id="devoirs-list">
         <div class="devoir-item"
              th:each="d : ${devoirs}"
@@ -52,8 +67,10 @@
 
             <div class="devoir-info">
                 <div class="devoir-title" th:text="${d.titre}">Titre du devoir</div>
-                <div class="devoir-cours-name"
-                     th:text="${d.cours != null} ? '📚 ' + ${d.cours.nom} : '📚 Sans cours'">Cours</div>
+                <div class="devoir-cours-name">
+                    <i class="fa-solid fa-book" style="margin-right:4px;"></i>
+                    <span th:text="${d.cours != null ? d.cours.nom : 'Sans cours'}">Cours</span>
+                </div>
             </div>
 
             <div class="devoir-right">
@@ -62,26 +79,25 @@
                     <div th:text="${#temporals.format(d.dateRemise, 'd MMM yyyy')}">Date</div>
                 </div>
 
-                <!-- Badge statut -->
-                <span th:if="${d.statut == 'PLANIFIE'}"  class="badge badge-yellow">À faire</span>
-                <span th:if="${d.statut == 'EN_COURS'}"  class="badge badge-orange">En cours</span>
-                <span th:if="${d.statut == 'TERMINE'}"   class="badge badge-green">Terminé</span>
+                <span th:if="${d.statut == 'PLANIFIE'}" class="badge badge-yellow">À faire</span>
+                <span th:if="${d.statut == 'EN_COURS'}" class="badge badge-orange">En cours</span>
+                <span th:if="${d.statut == 'TERMINE'}"  class="badge badge-green">Terminé</span>
 
-                <!-- Changer statut -->
                 <form th:action="@{/devoirs/statut/{id}(id=${d.id})}" method="post">
                     <select name="statut" class="form-control"
                             style="padding:5px 8px;font-size:12px;width:auto;"
                             onchange="this.form.submit()">
-                        <option value="PLANIFIE"  th:selected="${d.statut == 'PLANIFIE'}">📋 À faire</option>
-                        <option value="EN_COURS"  th:selected="${d.statut == 'EN_COURS'}">⏳ En cours</option>
-                        <option value="TERMINE"   th:selected="${d.statut == 'TERMINE'}">✅ Terminé</option>
+                        <option value="PLANIFIE" th:selected="${d.statut == 'PLANIFIE'}">À faire</option>
+                        <option value="EN_COURS" th:selected="${d.statut == 'EN_COURS'}">En cours</option>
+                        <option value="TERMINE"  th:selected="${d.statut == 'TERMINE'}">Terminé</option>
                     </select>
                 </form>
 
-                <!-- Supprimer -->
                 <form th:action="@{/devoirs/delete/{id}(id=${d.id})}" method="post"
                       onsubmit="return confirm('Supprimer ce devoir ?')">
-                    <button type="submit" class="btn btn-danger btn-icon btn-sm" title="Supprimer">🗑</button>
+                    <button type="submit" class="btn btn-danger btn-icon btn-sm" title="Supprimer">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </form>
             </div>
         </div>
@@ -93,13 +109,16 @@
 <div class="modal-backdrop" id="modalDevoir">
     <div class="modal">
         <div class="modal-header">
-            <h3>➕ Nouveau devoir</h3>
-            <button class="modal-close" onclick="closeModal('modalDevoir')">✕</button>
+            <h3><i class="fa-solid fa-plus"></i> Nouveau devoir</h3>
+            <button class="modal-close" onclick="closeModal('modalDevoir')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
         <form th:action="@{/devoirs/add}" method="post">
             <div class="form-group">
                 <label class="form-label">Titre du devoir *</label>
-                <input type="text" name="titre" class="form-control" placeholder="ex: Examen Python" required>
+                <input type="text" name="titre" class="form-control"
+                       placeholder="ex: Examen Python" required>
             </div>
             <div class="form-group">
                 <label class="form-label">Cours associé</label>
@@ -116,9 +135,9 @@
                 <div class="form-group">
                     <label class="form-label">Statut</label>
                     <select name="statut" class="form-control">
-                        <option value="PLANIFIE">📋 À faire</option>
-                        <option value="EN_COURS">⏳ En cours</option>
-                        <option value="TERMINE">✅ Terminé</option>
+                        <option value="PLANIFIE">À faire</option>
+                        <option value="EN_COURS">En cours</option>
+                        <option value="TERMINE">Terminé</option>
                     </select>
                 </div>
             </div>
@@ -128,8 +147,11 @@
                           placeholder="Notes sur ce devoir..."></textarea>
             </div>
             <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
-                <button type="button" class="btn btn-outline" onclick="closeModal('modalDevoir')">Annuler</button>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-outline"
+                        onclick="closeModal('modalDevoir')">Annuler</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                </button>
             </div>
         </form>
     </div>
@@ -143,17 +165,15 @@
     });
 
     function filtrer(statut, btn) {
-        document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active-filtre', 'btn-dark'));
-        document.querySelectorAll('.filtre-btn').forEach(b => b.classList.add('btn-outline'));
+        document.querySelectorAll('.filtre-btn').forEach(b => {
+            b.classList.remove('active-filtre', 'btn-dark');
+            b.classList.add('btn-outline');
+        });
         btn.classList.remove('btn-outline');
         btn.classList.add('btn-dark', 'active-filtre');
 
         document.querySelectorAll('.devoir-item').forEach(item => {
-            if (statut === 'tous' || item.dataset.statut === statut) {
-                item.style.display = 'flex';
-            } else {
-                item.style.display = 'none';
-            }
+            item.style.display = (statut === 'tous' || item.dataset.statut === statut) ? 'flex' : 'none';
         });
     }
 </script>

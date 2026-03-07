@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trackademy • Calendrier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -14,28 +15,32 @@
 <!-- MAIN -->
 <main class="main-content">
 
-    <!-- TOPBAR -->
     <div class="page-header">
         <div>
-            <div class="topbar-title">📅 Calendrier</div>
+            <div class="topbar-title">
+                <i class="fa-solid fa-calendar-days"></i> Calendrier
+            </div>
             <div class="topbar-sub">Gérez vos événements et échéances</div>
         </div>
         <button class="btn btn-primary" onclick="openModal('modalEvt')">
-            + Ajouter un événement
+            <i class="fa-solid fa-plus"></i> Ajouter un événement
         </button>
     </div>
 
-    <!-- LAYOUT CALENDRIER + SIDEBAR ÉVÉNEMENTS -->
     <div class="calendrier-layout">
 
         <!-- CALENDRIER -->
         <div class="calendar-box">
             <div class="calendar-nav">
                 <a th:href="@{/calendrier(annee=${mois == 1 ? annee - 1 : annee}, mois=${mois == 1 ? 12 : mois - 1})}"
-                   class="cal-nav-btn">&#8249;</a>
+                   class="cal-nav-btn">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
                 <h3 id="monthTitle">Chargement...</h3>
                 <a th:href="@{/calendrier(annee=${mois == 12 ? annee + 1 : annee}, mois=${mois == 12 ? 1 : mois + 1})}"
-                   class="cal-nav-btn">&#8250;</a>
+                   class="cal-nav-btn">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
             </div>
 
             <div class="weekdays">
@@ -46,15 +51,17 @@
             <div class="calendar-days" id="calGrid"></div>
         </div>
 
-        <!-- SIDEBAR ÉVÉNEMENTS DU MOIS -->
+        <!-- SIDEBAR ÉVÉNEMENTS -->
         <div class="events-sidebar-panel">
             <div class="panel-header">
-                <span class="panel-title">Événements du mois</span>
+                <span class="panel-title">
+                    <i class="fa-solid fa-list"></i> Événements du mois
+                </span>
             </div>
 
             <div th:if="${#lists.isEmpty(evenements)}">
                 <div class="empty-state" style="padding:30px 0;">
-                    <span class="empty-icon" style="font-size:32px;">🗓</span>
+                    <i class="fa-solid fa-calendar-xmark empty-icon" style="font-size:32px;"></i>
                     <p style="font-size:13px;">Aucun événement ce mois</p>
                 </div>
             </div>
@@ -63,30 +70,39 @@
                 <div class="event-dot" th:classappend="${evt.type}"></div>
                 <div style="flex:1;">
                     <div class="event-titre" th:text="${evt.titre}">Événement</div>
-                    <div class="event-date" th:text="${#temporals.format(evt.date, 'd MMM yyyy')}">Date</div>
+                    <div class="event-date"
+                         th:text="${#temporals.format(evt.date, 'd MMM yyyy')}">Date</div>
                 </div>
                 <form th:action="@{/calendrier/delete/{id}(id=${evt.id})}" method="post">
                     <input type="hidden" name="annee" th:value="${annee}">
                     <input type="hidden" name="mois"  th:value="${mois}">
-                    <button type="submit" class="btn btn-danger btn-icon btn-sm" title="Supprimer">x</button>
+                    <button type="submit" class="btn btn-danger btn-icon btn-sm" title="Supprimer">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </form>
             </div>
 
             <!-- Légende -->
             <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:16px;">
-                <div style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Légende</div>
+                <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">
+                    Légende
+                </div>
                 <div style="display:flex;flex-direction:column;gap:8px;">
                     <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
-                        <span style="width:10px;height:10px;border-radius:50%;background:var(--danger);display:inline-block;"></span> Examen
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--danger);display:inline-block;"></span>
+                        Examen
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
-                        <span style="width:10px;height:10px;border-radius:50%;background:var(--warning);display:inline-block;"></span> Devoir
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--warning);display:inline-block;"></span>
+                        Devoir
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
-                        <span style="width:10px;height:10px;border-radius:50%;background:var(--success);display:inline-block;"></span> Cours
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--success);display:inline-block;"></span>
+                        Cours
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
-                        <span style="width:10px;height:10px;border-radius:50%;background:var(--info);display:inline-block;"></span> Autre
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--info);display:inline-block;"></span>
+                        Autre
                     </div>
                 </div>
             </div>
@@ -99,13 +115,16 @@
 <div class="modal-backdrop" id="modalEvt">
     <div class="modal">
         <div class="modal-header">
-            <h3>Nouvel événement</h3>
-            <button class="modal-close" onclick="closeModal('modalEvt')">x</button>
+            <h3><i class="fa-solid fa-calendar-plus"></i> Nouvel événement</h3>
+            <button class="modal-close" onclick="closeModal('modalEvt')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
         <form th:action="@{/calendrier/add}" method="post">
             <div class="form-group">
                 <label class="form-label">Titre *</label>
-                <input type="text" name="titre" class="form-control" placeholder="ex: Examen de Java" required>
+                <input type="text" name="titre" class="form-control"
+                       placeholder="ex: Examen de Java" required>
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -124,11 +143,15 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Description</label>
-                <textarea name="description" class="form-control" rows="2" placeholder="Notes..."></textarea>
+                <textarea name="description" class="form-control" rows="2"
+                          placeholder="Notes..."></textarea>
             </div>
             <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
-                <button type="button" class="btn btn-outline" onclick="closeModal('modalEvt')">Annuler</button>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-outline"
+                        onclick="closeModal('modalEvt')">Annuler</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                </button>
             </div>
         </form>
     </div>
@@ -160,26 +183,16 @@
         let startDow = firstDay.getDay();
         if (startDow === 0) startDow = 7;
         for (let i = 1; i < startDow; i++) {
-            const empty = document.createElement('div');
-            empty.className = 'cal-day';
-            grid.appendChild(empty);
+            grid.appendChild(Object.assign(document.createElement('div'), { className: 'cal-day' }));
         }
 
-        // Map événements par jour
         const evtMap = {};
         if (Array.isArray(evenementsServeur)) {
             evenementsServeur.forEach(e => {
                 if (e && e.date) {
-                    let day;
-                    if (Array.isArray(e.date)) {
-                        day = parseInt(e.date[2]);
-                    } else if (typeof e.date === 'string') {
-                        day = parseInt(e.date.split('-')[2]);
-                    }
-                    if (day) {
-                        if (!evtMap[day]) evtMap[day] = [];
-                        evtMap[day].push(e);
-                    }
+                    let day = Array.isArray(e.date) ? parseInt(e.date[2])
+                            : parseInt((e.date + '').split('-')[2]);
+                    if (day) { if (!evtMap[day]) evtMap[day] = []; evtMap[day].push(e); }
                 }
             });
         }
@@ -187,7 +200,9 @@
         for (let d = 1; d <= lastDay.getDate(); d++) {
             const cell = document.createElement('div');
             cell.className = 'cal-day';
-            const isToday = d === today.getDate() && (mois - 1) === today.getMonth() && annee === today.getFullYear();
+            const isToday = d === today.getDate()
+                         && (mois - 1) === today.getMonth()
+                         && annee === today.getFullYear();
             if (isToday) cell.classList.add('today');
 
             const numEl = document.createElement('div');
@@ -195,14 +210,12 @@
             numEl.textContent = d;
             cell.appendChild(numEl);
 
-            if (evtMap[d]) {
-                evtMap[d].forEach(evt => {
-                    const evtEl = document.createElement('div');
-                    evtEl.className = 'cal-event ' + (evt.type || 'AUTRE');
-                    evtEl.textContent = evt.titre || '';
-                    cell.appendChild(evtEl);
-                });
-            }
+            (evtMap[d] || []).forEach(evt => {
+                const evtEl = document.createElement('div');
+                evtEl.className = 'cal-event ' + (evt.type || 'AUTRE');
+                evtEl.textContent = evt.titre || '';
+                cell.appendChild(evtEl);
+            });
             grid.appendChild(cell);
         }
     }

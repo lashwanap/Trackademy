@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trackademy • Mes cours</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -14,26 +15,27 @@
 <!-- MAIN -->
 <main class="main-content">
 
-    <!-- TOPBAR -->
     <div class="page-header">
         <div>
-            <div class="topbar-title">📚 Mes cours</div>
+            <div class="topbar-title">
+                <i class="fa-solid fa-book"></i> Mes cours
+            </div>
             <div class="topbar-sub"
                  th:text="${#lists.size(cours)} + ' cours ce semestre'">0 cours</div>
         </div>
         <button class="btn btn-primary" onclick="openModal('modalCours')">
-            + Ajouter un cours
+            <i class="fa-solid fa-plus"></i> Ajouter un cours
         </button>
     </div>
 
     <!-- ÉTAT VIDE -->
     <div th:if="${#lists.isEmpty(cours)}" class="panel">
         <div class="empty-state">
-            <span class="empty-icon">📖</span>
+            <i class="fa-solid fa-book-open empty-icon"></i>
             <p>Tu n'as encore aucun cours. Ajoute ton premier cours !</p>
             <button class="btn btn-primary" style="margin-top:20px;"
                     onclick="openModal('modalCours')">
-                + Ajouter un cours
+                <i class="fa-solid fa-plus"></i> Ajouter un cours
             </button>
         </div>
     </div>
@@ -42,32 +44,29 @@
     <div class="panel" th:if="${!#lists.isEmpty(cours)}">
         <div class="timeline-list">
             <div class="timeline-item" th:each="c : ${cours}">
-                <!-- Dot coloré selon la couleur du cours -->
                 <span class="timeline-dot"
                       th:style="'background:' + (${c.couleur != null} ? ${c.couleur} : '#FFD60A') + '; box-shadow: 0 0 0 2px ' + (${c.couleur != null} ? ${c.couleur} : '#FFD60A')">
                 </span>
-
-                <!-- Contenu -->
                 <div class="timeline-content">
                     <div class="timeline-title" th:text="${c.nom}">Nom du cours</div>
                     <div class="timeline-sub">
                         <span th:if="${c.professeur != null and !c.professeur.isEmpty()}"
                               th:text="'Prof. ' + ${c.professeur}"></span>
                         <span th:if="${c.horaire != null and !c.horaire.isEmpty()}"
-                              th:text="' · 🕐 ' + ${c.horaire}"></span>
+                              th:text="' · ' + ${c.horaire}"></span>
                         <span th:if="${c.salle != null and !c.salle.isEmpty()}"
-                              th:text="' · 📍 ' + ${c.salle}"></span>
+                              th:text="' · ' + ${c.salle}"></span>
                     </div>
                 </div>
-
-                <!-- Droite : crédits + supprimer -->
                 <div class="timeline-right">
                     <span class="badge badge-dark"
                           th:if="${c.credits > 0}"
                           th:text="${c.credits} + ' cr.'">cr.</span>
                     <form th:action="@{/cours/delete/{id}(id=${c.id})}" method="post"
                           onsubmit="return confirm('Supprimer ce cours ?')">
-                        <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -80,8 +79,10 @@
 <div class="modal-backdrop" id="modalCours">
     <div class="modal">
         <div class="modal-header">
-            <h3>➕ Nouveau cours</h3>
-            <button class="modal-close" onclick="closeModal('modalCours')">✕</button>
+            <h3><i class="fa-solid fa-plus"></i> Nouveau cours</h3>
+            <button class="modal-close" onclick="closeModal('modalCours')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
         <form th:action="@{/cours/add}" method="post">
             <div class="form-group">
@@ -121,7 +122,9 @@
             <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
                 <button type="button" class="btn btn-outline"
                         onclick="closeModal('modalCours')">Annuler</button>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                </button>
             </div>
         </form>
     </div>
@@ -134,6 +137,5 @@
         b.addEventListener('click', e => { if (e.target === b) b.classList.remove('open'); });
     });
 </script>
-
 </body>
 </html>

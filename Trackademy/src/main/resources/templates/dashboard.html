@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trackademy • Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -22,19 +23,19 @@
         </div>
         <div class="topbar-right">
             <div class="search-bar">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                 <input type="text" placeholder="Rechercher...">
             </div>
         </div>
     </div>
 
-    <!-- LAYOUT PRINCIPAL -->
+    <!-- LAYOUT -->
     <div class="dash-layout">
 
         <!-- COLONNE GAUCHE -->
         <div class="dash-main">
 
-            <!-- CARTE PROFIL COMPLÈTE -->
+            <!-- CARTE PROFIL -->
             <div class="profile-card">
                 <div class="profile-card-header">
                     <img class="profile-avatar"
@@ -43,7 +44,9 @@
                     <div class="profile-header-info">
                         <div class="p-name">
                             Lashwana Elamba
-                            <a href="#" class="edit-btn">✏ Modifier</a>
+                            <a href="#" class="edit-btn">
+                                <i class="fa-solid fa-pen"></i> Modifier
+                            </a>
                         </div>
                         <div class="profile-grid">
                             <div class="profile-field">
@@ -65,7 +68,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Strip de stats en bas de la carte -->
                 <div class="profile-stat-strip">
                     <div class="pstat">
                         <span class="pstat-num" th:text="${nbCours}">0</span>
@@ -84,7 +86,9 @@
                     </div>
                     <div class="pstat-divider"></div>
                     <div class="pstat">
-                        <a th:href="@{/calendrier}" class="pstat-num pstat-link">Voir →</a>
+                        <a th:href="@{/calendrier}" class="pstat-num pstat-link">
+                            Voir <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                         <span class="pstat-label">Calendrier</span>
                     </div>
                 </div>
@@ -93,12 +97,16 @@
             <!-- PROCHAINS DEVOIRS -->
             <div class="panel">
                 <div class="panel-header">
-                    <span class="panel-title">📝 Prochains devoirs</span>
-                    <a th:href="@{/devoirs}" class="panel-link">Tout voir →</a>
+                    <span class="panel-title">
+                        <i class="fa-solid fa-list-check"></i> Prochains devoirs
+                    </span>
+                    <a th:href="@{/devoirs}" class="panel-link">
+                        Tout voir <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
 
                 <div th:if="${#lists.isEmpty(prochainDevoirs)}" class="empty-state">
-                    <span class="empty-icon">🎉</span>
+                    <i class="fa-solid fa-circle-check empty-icon"></i>
                     <p>Aucun devoir en attente — bien joué !</p>
                 </div>
 
@@ -114,12 +122,14 @@
                             </div>
                         </div>
                         <div class="timeline-right">
-                            <span th:if="${d.statut == 'PLANIFIE'}"  class="badge badge-yellow">À faire</span>
-                            <span th:if="${d.statut == 'EN_COURS'}"  class="badge badge-orange">En cours</span>
-                            <span th:if="${d.statut == 'TERMINE'}"   class="badge badge-green">Terminé</span>
+                            <span th:if="${d.statut == 'PLANIFIE'}" class="badge badge-yellow">À faire</span>
+                            <span th:if="${d.statut == 'EN_COURS'}" class="badge badge-orange">En cours</span>
+                            <span th:if="${d.statut == 'TERMINE'}"  class="badge badge-green">Terminé</span>
                             <a th:href="@{/devoirs}"
                                th:classappend="${d.statut == 'TERMINE' ? 'done' : ''}"
-                               class="timeline-arrow">→</a>
+                               class="timeline-arrow">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -130,38 +140,44 @@
         <!-- COLONNE DROITE -->
         <div class="dash-side">
 
-            <!-- NAVIGATION RAPIDE (dark) -->
+            <!-- NAVIGATION RAPIDE -->
             <div class="quick-nav-card">
-                <div class="qn-title">🚀 Navigation rapide</div>
+                <div class="qn-title">
+                    <i class="fa-solid fa-rocket"></i> Navigation rapide
+                </div>
                 <a th:href="@{/cours}" class="qn-link">
-                    <span class="qn-icon">📚</span>
+                    <i class="fa-solid fa-book qn-icon"></i>
                     <span>Mes cours</span>
-                    <span class="qn-badge" th:if="${sidebarNbCours != null and sidebarNbCours > 0}"
+                    <span class="qn-badge"
+                          th:if="${sidebarNbCours != null and sidebarNbCours > 0}"
                           th:text="${sidebarNbCours}">0</span>
-                    <span class="qn-arrow">→</span>
+                    <i class="fa-solid fa-chevron-right qn-arrow"></i>
                 </a>
                 <a th:href="@{/devoirs}" class="qn-link">
-                    <span class="qn-icon">📝</span>
+                    <i class="fa-solid fa-pen-to-square qn-icon"></i>
                     <span>Devoirs</span>
-                    <span class="qn-badge" th:if="${sidebarNbDevoirs != null and sidebarNbDevoirs > 0}"
+                    <span class="qn-badge"
+                          th:if="${sidebarNbDevoirs != null and sidebarNbDevoirs > 0}"
                           th:text="${sidebarNbDevoirs}">0</span>
-                    <span class="qn-arrow">→</span>
+                    <i class="fa-solid fa-chevron-right qn-arrow"></i>
                 </a>
                 <a th:href="@{/calendrier}" class="qn-link">
-                    <span class="qn-icon">📅</span>
+                    <i class="fa-solid fa-calendar-days qn-icon"></i>
                     <span>Calendrier</span>
-                    <span class="qn-arrow">→</span>
+                    <i class="fa-solid fa-chevron-right qn-arrow"></i>
                 </a>
                 <a th:href="@{/budget}" class="qn-link">
-                    <span class="qn-icon">💰</span>
+                    <i class="fa-solid fa-wallet qn-icon"></i>
                     <span>Budget</span>
-                    <span class="qn-arrow">→</span>
+                    <i class="fa-solid fa-chevron-right qn-arrow"></i>
                 </a>
             </div>
 
             <!-- BUDGET RÉSUMÉ -->
             <div class="budget-side-card">
-                <div class="budget-side-title">💰 Mon budget</div>
+                <div class="budget-side-title">
+                    <i class="fa-solid fa-wallet"></i> Mon budget
+                </div>
                 <div class="bsc-row">
                     <span class="bsc-label">Solde actuel</span>
                     <span class="bsc-value"
@@ -181,7 +197,7 @@
                 <div style="margin-top:16px;">
                     <a th:href="@{/budget}" class="btn btn-primary"
                        style="width:100%;justify-content:center;">
-                        Gérer mon budget →
+                        Gérer mon budget <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
