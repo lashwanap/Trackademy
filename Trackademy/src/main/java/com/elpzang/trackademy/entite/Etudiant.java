@@ -25,7 +25,7 @@ public class Etudiant {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "mot_de_passe")
+    @Column(name = "mot_passe")
     private String motDePasse;
 
     public Etudiant() {}
