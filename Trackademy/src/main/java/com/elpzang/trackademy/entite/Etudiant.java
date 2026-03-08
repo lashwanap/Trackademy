@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "etudiante")
 public class Etudiant {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,7 +22,11 @@ public class Etudiant {
     @Column(name = "session")
     private String session;
 
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "mot_de_passe")
+    private String motDePasse;
 
     public Etudiant() {}
 
@@ -40,4 +45,9 @@ public class Etudiant {
     public String getSession() { return session; }
     public void setSession(String session) { this.session = session; }
 
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getMotDePasse() { return motDePasse; }
+    public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
 }

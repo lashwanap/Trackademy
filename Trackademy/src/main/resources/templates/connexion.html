@@ -1,24 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion — Trackademy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-    <div class="main">
-        <div class="login-box">
-            <h2>Connexion</h2>
+<body class="auth-body">
 
-            <input type="email" placeholder="Adresse email">
-            <input type="password" placeholder="Mot de passe">
+<div class="auth-page">
+    <div class="auth-card">
 
-            <button>Se connecter</button>
-
-            <p>
-                Pas encore de compte ?
-                <a href="#">Créer un compte</a>
-            </p>
+        <!-- Logo -->
+        <div class="auth-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Trackademy</span>
         </div>
+
+        <h1 class="auth-title">Bon retour !</h1>
+        <p class="auth-sub">Connectez-vous à votre espace étudiant</p>
+
+        <!-- Succès après inscription -->
+        <div class="auth-alert auth-alert-success"
+             th:if="${succes != null}" th:text="${succes}"></div>
+
+        <!-- Confirmation déconnexion -->
+        <div class="auth-alert auth-alert-info"
+             th:if="${deconnecte != null}" th:text="${deconnecte}"></div>
+
+        <!-- Erreur de connexion -->
+        <div class="auth-alert auth-alert-error"
+             th:if="${erreur != null}" th:text="${erreur}"></div>
+
+        <!-- Formulaire Spring Security -->
+        <form th:action="@{/connexion}" method="post" class="auth-form">
+
+            <div class="auth-field">
+                <label for="email">
+                    <i class="fa-solid fa-envelope"></i> Adresse courriel
+                </label>
+                <input type="email" id="email" name="email"
+                       placeholder="votre@email.com" required autocomplete="email">
+            </div>
+
+            <div class="auth-field">
+                <label for="motDePasse">
+                    <i class="fa-solid fa-lock"></i> Mot de passe
+                </label>
+                <input type="password" id="motDePasse" name="motDePasse"
+                       placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="auth-btn">
+                <i class="fa-solid fa-right-to-bracket"></i> Se connecter
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            Pas encore de compte ?
+            <a th:href="@{/inscription}">Créer un compte</a>
+        </div>
+
     </div>
+</div>
+
 </body>
 </html>

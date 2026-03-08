@@ -6,23 +6,23 @@
     <!-- Logo -->
     <div class="sidebar-logo">
         <div class="logo-text">Trackademy</div>
-        <span class="logo-sub">Espace étudiant</span>
+        <span class="logo-sub" th:text="#{app.studentSpace}">Espace étudiant</span>
     </div>
 
     <!-- Navigation -->
     <nav class="sidebar-nav">
-        <span class="nav-section">Principal</span>
+        <span class="nav-section" th:text="#{nav.section.main}">Principal</span>
         <ul>
             <li>
                 <a th:href="@{/}" th:classappend="${activePage == 'dashboard'} ? 'active'">
                     <span class="nav-icon"><i class="fa-solid fa-house fa-fw"></i></span>
-                    <span class="nav-label-text">Dashboard</span>
+                    <span class="nav-label-text" th:text="#{nav.dashboard}">Dashboard</span>
                 </a>
             </li>
             <li>
                 <a th:href="@{/cours}" th:classappend="${activePage == 'cours'} ? 'active'">
                     <span class="nav-icon"><i class="fa-solid fa-book fa-fw"></i></span>
-                    <span class="nav-label-text">Mes cours</span>
+                    <span class="nav-label-text" th:text="#{nav.courses}">Mes cours</span>
                     <span class="nav-badge"
                           th:if="${sidebarNbCours != null and sidebarNbCours > 0}"
                           th:text="${sidebarNbCours}">0</span>
@@ -31,7 +31,7 @@
             <li>
                 <a th:href="@{/devoirs}" th:classappend="${activePage == 'devoirs'} ? 'active'">
                     <span class="nav-icon"><i class="fa-solid fa-pen-to-square fa-fw"></i></span>
-                    <span class="nav-label-text">Devoirs</span>
+                    <span class="nav-label-text" th:text="#{nav.assignments}">Devoirs</span>
                     <span class="nav-badge"
                           th:if="${sidebarNbDevoirs != null and sidebarNbDevoirs > 0}"
                           th:text="${sidebarNbDevoirs}">0</span>
@@ -40,17 +40,17 @@
             <li>
                 <a th:href="@{/calendrier}" th:classappend="${activePage == 'calendrier'} ? 'active'">
                     <span class="nav-icon"><i class="fa-solid fa-calendar-days fa-fw"></i></span>
-                    <span class="nav-label-text">Calendrier</span>
+                    <span class="nav-label-text" th:text="#{nav.calendar}">Calendrier</span>
                 </a>
             </li>
         </ul>
 
-        <span class="nav-section">Finances</span>
+        <span class="nav-section" th:text="#{nav.section.finance}">Finances</span>
         <ul>
             <li>
                 <a th:href="@{/budget}" th:classappend="${activePage == 'budget'} ? 'active'">
                     <span class="nav-icon"><i class="fa-solid fa-wallet fa-fw"></i></span>
-                    <span class="nav-label-text">Budget</span>
+                    <span class="nav-label-text" th:text="#{nav.budget}">Budget</span>
                 </a>
             </li>
         </ul>
@@ -63,12 +63,20 @@
 
     <!-- Profil -->
     <div class="sidebar-profile">
-        <img src="https://i.pravatar.cc/80?img=47" alt="Photo profil">
+        <img src="https://tse2.mm.bing.net/th/id/OIP.xW0UnGHOWNTRKzozDPDTawHaHa?pid=Api&P=0&h=180" alt="Photo profil">
         <div>
             <span class="profile-name">Lashwana</span>
-            <span class="profile-role">Étudiante</span>
+            <span class="profile-role" th:text="#{profile.role.student}">Étudiante</span>
         </div>
     </div>
+
+    <!-- Bouton déconnexion -->
+    <form th:action="@{/logout}" method="post" class="sidebar-logout-wrap">
+        <button type="submit" class="sidebar-logout-btn">
+            <span class="nav-icon"><i class="fa-solid fa-right-from-bracket fa-fw"></i></span>
+            <span class="nav-label-text">Se déconnecter</span>
+        </button>
+    </form>
 
 </aside>
 </body>

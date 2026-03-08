@@ -24,4 +24,8 @@ public class EtudiantService {
     public void deleteById(int id) {
         etudiantRepository.deleteById(id);
     }
+
+    public Etudiant findByEmail(String email) {
+        return etudiantRepository.findByEmail(email).orElse(null);
+    }
 }
