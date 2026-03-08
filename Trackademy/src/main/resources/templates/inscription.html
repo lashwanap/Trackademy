@@ -27,6 +27,9 @@
 
         <form th:action="@{/inscription}" method="post" class="auth-form">
 
+            <!-- Token CSRF (requis par Spring Security) -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
             <!-- Prénom + Nom -->
             <div class="auth-row">
                 <div class="auth-field">

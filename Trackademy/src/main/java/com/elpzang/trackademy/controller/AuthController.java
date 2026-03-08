@@ -70,7 +70,14 @@ public class AuthController {
         etudiant.setProgramme(programme);
         etudiant.setSession(session);
         etudiant.setMotDePasse(passwordEncoder.encode(motDePasse));
-        etudiantService.save(etudiant);
+
+        try {
+            etudiantService.save(etudiant);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erreur",
+                    "Erreur lors de la création du compte : " + e.getMessage());
+            return "redirect:/inscription";
+        }
 
         redirectAttributes.addFlashAttribute("succes",
                 "Compte créé avec succès ! Vous pouvez maintenant vous connecter.");
