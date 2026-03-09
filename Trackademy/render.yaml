@@ -1,0 +1,27 @@
+databases:
+  - name: trackademy-db
+    plan: free
+
+services:
+  - type: web
+    name: trackademy
+    runtime: java
+    plan: free
+    branch: main
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: JAVA_VERSION
+        value: 21
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: trackademy-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: trackademy-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: trackademy-db
+          property: password
