@@ -21,13 +21,16 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- =============================================================
 -- 2. TABLE : etudiante
---    Colonnes réelles : id | nom | prenom | programme | session | mot_passe | email
+--    Colonnes réelles : id | nom | prenom | programme | session | mot_de_passe | email
+--    IMPORTANT : mot_de_passe doit être un hash BCrypt.
+--    Après avoir exécuté ce script, utilisez le formulaire /inscription
+--    pour définir un mot de passe valide pour chaque compte.
 -- =============================================================
-INSERT INTO etudiante (nom, prenom, programme, session, mot_passe, email) VALUES
-('Elamba',     'Lashwana',   'Techniques de l''informatique',  'Hiver 2026', 'lashwana123',  'lashwana.elamba@etud.cegep.qc.ca'),
-('Tremblay',   'Felix',      'Développement de jeux vidéo',    'Hiver 2026', 'felix456',     'felix.tremblay@etud.cegep.qc.ca'),
-('Nguyen',     'Mia',        'Techniques de l''informatique',  'Hiver 2026', 'mia789',       'mia.nguyen@etud.cegep.qc.ca'),
-('Beaulieu',   'Samuel',     'Administration des réseaux',     'Hiver 2026', 'sam2026',      'samuel.beaulieu@etud.cegep.qc.ca');
+INSERT INTO etudiante (nom, prenom, programme, session, mot_de_passe, email) VALUES
+('Elamba',     'Lashwana',   'Techniques de l''informatique',  'Hiver 2026', NULL,  'lashwana.elamba@etud.cegep.qc.ca'),
+('Tremblay',   'Felix',      'Développement de jeux vidéo',    'Hiver 2026', NULL,  'felix.tremblay@etud.cegep.qc.ca'),
+('Nguyen',     'Mia',        'Techniques de l''informatique',  'Hiver 2026', NULL,  'mia.nguyen@etud.cegep.qc.ca'),
+('Beaulieu',   'Samuel',     'Administration des réseaux',     'Hiver 2026', NULL,  'samuel.beaulieu@etud.cegep.qc.ca');
 
 -- =============================================================
 -- 3. TABLE : cours

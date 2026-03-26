@@ -1,9 +1,13 @@
 package com.elpzang.trackademy.controller;
 
+import com.elpzang.trackademy.entite.Etudiant;
 import com.elpzang.trackademy.service.BudgetService;
 import com.elpzang.trackademy.service.CoursService;
 import com.elpzang.trackademy.service.DevoirService;
+import com.elpzang.trackademy.service.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +29,13 @@ public class HomeController {
     @Autowired
     private BudgetService budgetService;
 
+    @Autowired
+    private EtudiantService etudiantService;
+
     @GetMapping("/")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Etudiant etudiant = etudiantService.findByEmail(userDetails.getUsername());
+        model.addAttribute("etudiant", etudiant);
         model.addAttribute("activePage", "dashboard");
         model.addAttribute("nbCours", coursService.count());
         model.addAttribute("nbDevoirs", devoirService.countPending());

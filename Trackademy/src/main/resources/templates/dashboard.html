@@ -18,7 +18,7 @@
     <!-- TOPBAR -->
     <div class="topbar">
         <div>
-            <div class="topbar-title">Bonjour, Lashwana 👋</div>
+            <div class="topbar-title" th:text="'Bonjour, ' + ${etudiant.prenom} + ' 👋'">Bonjour 👋</div>
             <div class="topbar-sub" th:text="'Aujourd\'hui, ' + ${dateAujourdhui}">Aujourd'hui</div>
         </div>
         <div class="topbar-right">
@@ -43,7 +43,7 @@
                          alt="Photo de profil">
                     <div class="profile-header-info">
                         <div class="p-name">
-                            Lashwana Elamba
+                            <span th:text="${etudiant.prenom + ' ' + etudiant.nom}">Nom</span>
                             <a href="#" class="edit-btn">
                                 <i class="fa-solid fa-pen"></i> Modifier
                             </a>
@@ -51,19 +51,15 @@
                         <div class="profile-grid">
                             <div class="profile-field">
                                 <span class="f-label">Programme</span>
-                                <span class="f-value">Techniques de l'informatique</span>
+                                <span class="f-value" th:text="${etudiant.programme}">Programme</span>
                             </div>
                             <div class="profile-field">
                                 <span class="f-label">Session</span>
-                                <span class="f-value">Hiver 2026</span>
+                                <span class="f-value" th:text="${etudiant.session}">Session</span>
                             </div>
                             <div class="profile-field">
                                 <span class="f-label">Courriel</span>
-                                <span class="f-value">lashwana.elamba@etud.cegep.qc.ca</span>
-                            </div>
-                            <div class="profile-field">
-                                <span class="f-label">Statut</span>
-                                <span class="f-value">Étudiante à temps plein</span>
+                                <span class="f-value" th:text="${etudiant.email}">Email</span>
                             </div>
                         </div>
                     </div>
