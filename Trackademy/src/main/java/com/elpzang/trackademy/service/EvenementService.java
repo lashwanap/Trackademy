@@ -1,5 +1,6 @@
 package com.elpzang.trackademy.service;
 
+import com.elpzang.trackademy.entite.Etudiant;
 import com.elpzang.trackademy.entite.Evenement;
 import com.elpzang.trackademy.repository.EvenementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,12 @@ public class EvenementService {
         LocalDate debut = LocalDate.of(annee, mois, 1);
         LocalDate fin = debut.withDayOfMonth(debut.lengthOfMonth());
         return evenementRepository.findByDateBetween(debut, fin);
+    }
+
+    public List<Evenement> findByMoisEtudiant(int annee, int mois, Etudiant etudiant) {
+        LocalDate debut = LocalDate.of(annee, mois, 1);
+        LocalDate fin = debut.withDayOfMonth(debut.lengthOfMonth());
+        return evenementRepository.findByEtudiantAndDateBetween(etudiant, debut, fin);
     }
 
     public Evenement save(Evenement evenement) {

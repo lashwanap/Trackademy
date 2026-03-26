@@ -2,9 +2,13 @@ package com.elpzang.trackademy.controller;
 
 import com.elpzang.trackademy.entite.Cours;
 import com.elpzang.trackademy.entite.Devoir;
+import com.elpzang.trackademy.entite.Etudiant;
 import com.elpzang.trackademy.service.CoursService;
 import com.elpzang.trackademy.service.DevoirService;
+import com.elpzang.trackademy.service.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +25,15 @@ public class DevoirController {
     @Autowired
     private CoursService coursService;
 
+    @Autowired
+    private EtudiantService etudiantService;
+
     @GetMapping
-    public String listDevoirs(Model model) {
+    public String listDevoirs(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Etudiant etudiant = etudiantService.findByEmail(userDetails.getUsername());
         model.addAttribute("activePage", "devoirs");
-        model.addAttribute("devoirs", devoirService.findAll());
-        model.addAttribute("cours", coursService.findAll());
+        model.addAttribute("devoirs", devoirService.findByEtudiant(etudiant));
+        model.addAttribute("cours", coursService.findByEtudiant(etudiant));
         model.addAttribute("nouveauDevoir", new Devoir());
         return "devoirs";
     }
@@ -36,7 +44,8 @@ public class DevoirController {
             @RequestParam(required = false) Long coursId,
             @RequestParam(required = false) String dateRemise,
             @RequestParam(required = false) String description,
-            @RequestParam(defaultValue = "PLANIFIE") String statut) {
+            @RequestParam(defaultValue = "PLANIFIE") String statut,
+            @AuthenticationPrincipal UserDetails userDetails) {
 
         Devoir devoir = new Devoir();
         devoir.setTitre(titre);

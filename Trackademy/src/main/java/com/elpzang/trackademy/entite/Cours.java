@@ -28,6 +28,10 @@ public class Cours {
     @Column(name = "couleur")
     private String couleur;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "etudiant_id")
+    private Etudiant etudiant;
+
     public Cours() {}
 
     public Long getId() { return id; }
@@ -50,4 +54,7 @@ public class Cours {
 
     public String getCouleur() { return couleur; }
     public void setCouleur(String couleur) { this.couleur = couleur; }
+
+    public Etudiant getEtudiant() { return etudiant; }
+    public void setEtudiant(Etudiant etudiant) { this.etudiant = etudiant; }
 }

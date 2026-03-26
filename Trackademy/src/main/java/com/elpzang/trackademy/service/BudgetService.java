@@ -1,5 +1,6 @@
 package com.elpzang.trackademy.service;
 
+import com.elpzang.trackademy.entite.Etudiant;
 import com.elpzang.trackademy.entite.Transaction;
 import com.elpzang.trackademy.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,23 @@ public class BudgetService {
 
     public void deleteById(Long id) {
         transactionRepository.deleteById(id);
+    }
+
+    public List<Transaction> findByEtudiant(Etudiant etudiant) {
+        return transactionRepository.findByEtudiantOrderByDateDesc(etudiant);
+    }
+
+    public BigDecimal totalRevenusParEtudiant(Etudiant etudiant) {
+        BigDecimal val = transactionRepository.sumRevenusParEtudiant(etudiant);
+        return val != null ? val : BigDecimal.ZERO;
+    }
+
+    public BigDecimal totalDepensesParEtudiant(Etudiant etudiant) {
+        BigDecimal val = transactionRepository.sumDepensesParEtudiant(etudiant);
+        return val != null ? val : BigDecimal.ZERO;
+    }
+
+    public BigDecimal soldeParEtudiant(Etudiant etudiant) {
+        return totalRevenusParEtudiant(etudiant).subtract(totalDepensesParEtudiant(etudiant));
     }
 }

@@ -29,6 +29,10 @@ public class Transaction {
     @Column(name = "date_transaction")
     private LocalDate date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "etudiant_id")
+    private Etudiant etudiant;
+
     public Transaction() {}
 
     public Long getId() { return id; }
@@ -48,4 +52,7 @@ public class Transaction {
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
+
+    public Etudiant getEtudiant() { return etudiant; }
+    public void setEtudiant(Etudiant etudiant) { this.etudiant = etudiant; }
 }

@@ -28,6 +28,9 @@ public class Etudiant {
     @Column(name = "mot_de_passe")
     private String motDePasse;
 
+    @Column(name = "photo_profil")
+    private String photoProfil;
+
     public Etudiant() {}
 
     public int getId() { return id; }
@@ -50,4 +53,11 @@ public class Etudiant {
 
     public String getMotDePasse() { return motDePasse; }
     public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
+
+    public String getPhotoProfil() { return photoProfil; }
+    public void setPhotoProfil(String photoProfil) { this.photoProfil = photoProfil; }
+
+    public String getPhotoProfilUrl() {
+        return photoProfil != null ? photoProfil : "https://i.pravatar.cc/160?img=47";
+    }
 }

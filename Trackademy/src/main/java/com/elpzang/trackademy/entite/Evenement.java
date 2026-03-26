@@ -24,6 +24,10 @@ public class Evenement {
     @Column(name = "description")
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "etudiant_id")
+    private Etudiant etudiant;
+
     public Evenement() {}
 
     public Long getId() { return id; }
@@ -40,4 +44,7 @@ public class Evenement {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public Etudiant getEtudiant() { return etudiant; }
+    public void setEtudiant(Etudiant etudiant) { this.etudiant = etudiant; }
 }

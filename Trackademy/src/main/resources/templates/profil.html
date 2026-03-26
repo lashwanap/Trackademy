@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trackademy • Mon Profil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .profil-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Current avatar display */
+        .profil-current {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: var(--card-bg, #1e2235);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .profil-current-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent, #6c63ff);
+            flex-shrink: 0;
+        }
+
+        .profil-current-info h2 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.4rem;
+            color: var(--text-primary, #fff);
+        }
+
+        .profil-current-info p {
+            margin: 0;
+            color: var(--text-secondary, #94a3b8);
+            font-size: 0.9rem;
+        }
+
+        /* Success banner */
+        .alert-succes {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            border-radius: 10px;
+            color: #4ade80;
+            padding: 0.85rem 1.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.92rem;
+        }
+
+        /* Avatar gallery section */
+        .avatar-section {
+            background: var(--card-bg, #1e2235);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .avatar-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary, #94a3b8);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Netflix-style grid */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .avatar-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .avatar-item form {
+            margin: 0;
+        }
+
+        .avatar-item button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .avatar-img-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* square aspect ratio */
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid transparent;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .avatar-item:hover .avatar-img-wrap {
+            border-color: var(--accent, #6c63ff);
+            transform: scale(1.05);
+        }
+
+        .avatar-img-wrap.selected {
+            border-color: var(--accent, #6c63ff);
+        }
+
+        .avatar-img-wrap img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Checkmark overlay for selected avatar */
+        .avatar-check {
+            display: none;
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: var(--accent, #6c63ff);
+            color: #fff;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .avatar-img-wrap.selected .avatar-check {
+            display: flex;
+        }
+
+        /* Dim overlay on hover */
+        .avatar-img-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(108, 99, 255, 0);
+            transition: background 0.2s;
+        }
+
+        .avatar-item:hover .avatar-img-wrap::after {
+            background: rgba(108, 99, 255, 0.15);
+        }
+
+        /* Info card */
+        .profil-info-card {
+            background: var(--card-bg, #1e2235);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .profil-info-card h3 {
+            margin: 0 0 1.25rem 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary, #94a3b8);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .profil-info-row {
+            display: flex;
+            gap: 1rem;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .profil-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .profil-info-label {
+            width: 140px;
+            flex-shrink: 0;
+            color: var(--text-secondary, #94a3b8);
+            font-size: 0.88rem;
+        }
+
+        .profil-info-value {
+            color: var(--text-primary, #fff);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar('profil')}"></div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <div class="page-header">
+        <div>
+            <div class="topbar-title">
+                <i class="fa-solid fa-user-circle"></i> Mon Profil
+            </div>
+            <div class="topbar-sub">Personnalisez votre photo de profil</div>
+        </div>
+    </div>
+
+    <div class="profil-wrapper">
+
+        <!-- Success message -->
+        <div class="alert-succes" th:if="${succes}">
+            <i class="fa-solid fa-circle-check"></i>
+            <span th:text="${succes}"></span>
+        </div>
+
+        <!-- Current profile display -->
+        <div class="profil-current">
+            <img class="profil-current-img"
+                 th:src="${etudiant.photoProfilUrl}"
+                 th:alt="${etudiant.prenom}">
+            <div class="profil-current-info">
+                <h2 th:text="${etudiant.prenom} + ' ' + ${etudiant.nom}">Prénom Nom</h2>
+                <p th:text="${etudiant.email}">email@exemple.com</p>
+                <p th:text="${etudiant.programme} + ' — ' + ${etudiant.session}">Programme — Session</p>
+            </div>
+        </div>
+
+        <!-- Info card -->
+        <div class="profil-info-card">
+            <h3><i class="fa-solid fa-circle-info"></i> Informations</h3>
+            <div class="profil-info-row">
+                <span class="profil-info-label">Nom complet</span>
+                <span class="profil-info-value" th:text="${etudiant.prenom} + ' ' + ${etudiant.nom}">—</span>
+            </div>
+            <div class="profil-info-row">
+                <span class="profil-info-label">Courriel</span>
+                <span class="profil-info-value" th:text="${etudiant.email}">—</span>
+            </div>
+            <div class="profil-info-row">
+                <span class="profil-info-label">Programme</span>
+                <span class="profil-info-value" th:text="${etudiant.programme}">—</span>
+            </div>
+            <div class="profil-info-row">
+                <span class="profil-info-label">Session</span>
+                <span class="profil-info-value" th:text="${etudiant.session}">—</span>
+            </div>
+        </div>
+
+        <!-- Avatar gallery -->
+        <div class="avatar-section">
+            <div class="avatar-section-title">
+                <i class="fa-solid fa-images"></i> Choisir une photo de profil
+            </div>
+
+            <div class="avatar-grid">
+                <div class="avatar-item" th:each="avatar : ${avatars}">
+                    <form th:action="@{/profil/avatar}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="hidden" name="avatarUrl" th:value="${avatar}"/>
+                        <button type="submit" title="Choisir cet avatar">
+                            <div class="avatar-img-wrap"
+                                 th:classappend="${avatar == etudiant.photoProfilUrl} ? 'selected' : ''">
+                                <img th:src="${avatar}" alt="Avatar"/>
+                                <div class="avatar-check">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /profil-wrapper -->
+
+</main>
+
+</body>
+</html>

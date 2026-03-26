@@ -54,6 +54,16 @@
                 </a>
             </li>
         </ul>
+
+        <span class="nav-section">Compte</span>
+        <ul>
+            <li>
+                <a th:href="@{/profil}" th:classappend="${activePage == 'profil'} ? 'active'">
+                    <span class="nav-icon"><i class="fa-solid fa-user-circle fa-fw"></i></span>
+                    <span class="nav-label-text">Mon profil</span>
+                </a>
+            </li>
+        </ul>
     </nav>
 
     <!-- Illustration décorative -->
@@ -62,13 +72,14 @@
     </div>
 
     <!-- Profil -->
-    <div class="sidebar-profile">
-        <img src="https://tse2.mm.bing.net/th/id/OIP.xW0UnGHOWNTRKzozDPDTawHaHa?pid=Api&P=0&h=180" alt="Photo profil">
+    <a th:href="@{/profil}" class="sidebar-profile" style="text-decoration: none; cursor: pointer;">
+        <img th:src="${etudiant != null ? etudiant.photoProfilUrl : 'https://i.pravatar.cc/160?img=47'}"
+             alt="Photo profil">
         <div>
-            <span class="profile-name">Lashwana</span>
+            <span class="profile-name" th:text="${etudiant != null ? etudiant.prenom : ''}">Étudiant</span>
             <span class="profile-role" th:text="#{profile.role.student}">Étudiante</span>
         </div>
-    </div>
+    </a>
 
     <!-- Bouton déconnexion -->
     <form th:action="@{/logout}" method="post" class="sidebar-logout-wrap">

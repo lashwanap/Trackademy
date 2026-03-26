@@ -1,6 +1,7 @@
 package com.elpzang.trackademy.service;
 
 import com.elpzang.trackademy.entite.Cours;
+import com.elpzang.trackademy.entite.Etudiant;
 import com.elpzang.trackademy.repository.CoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,13 @@ public class CoursService {
 
     public Cours findById(Long id) {
         return coursRepository.findById(id).orElse(null);
+    }
+
+    public List<Cours> findByEtudiant(Etudiant etudiant) {
+        return coursRepository.findByEtudiant(etudiant);
+    }
+
+    public long countByEtudiant(Etudiant etudiant) {
+        return coursRepository.countByEtudiant(etudiant);
     }
 }

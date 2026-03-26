@@ -37,10 +37,10 @@ public class HomeController {
         Etudiant etudiant = etudiantService.findByEmail(userDetails.getUsername());
         model.addAttribute("etudiant", etudiant);
         model.addAttribute("activePage", "dashboard");
-        model.addAttribute("nbCours", coursService.count());
-        model.addAttribute("nbDevoirs", devoirService.countPending());
-        model.addAttribute("prochainDevoirs", devoirService.findPending());
-        BigDecimal solde = budgetService.solde();
+        model.addAttribute("nbCours", coursService.countByEtudiant(etudiant));
+        model.addAttribute("nbDevoirs", devoirService.countPendingByEtudiant(etudiant));
+        model.addAttribute("prochainDevoirs", devoirService.findPendingByEtudiant(etudiant));
+        BigDecimal solde = budgetService.soldeParEtudiant(etudiant);
         model.addAttribute("solde", solde);
 
         // Pourcentage pour la barre de progression (objectif 500 $)

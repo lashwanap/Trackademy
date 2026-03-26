@@ -1,6 +1,7 @@
 package com.elpzang.trackademy.service;
 
 import com.elpzang.trackademy.entite.Devoir;
+import com.elpzang.trackademy.entite.Etudiant;
 import com.elpzang.trackademy.repository.DevoirRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,17 @@ public class DevoirService {
             d.setStatut(statut);
             devoirRepository.save(d);
         }
+    }
+
+    public List<Devoir> findByEtudiant(Etudiant etudiant) {
+        return devoirRepository.findByCoursEtudiant(etudiant);
+    }
+
+    public List<Devoir> findPendingByEtudiant(Etudiant etudiant) {
+        return devoirRepository.findByCoursEtudiantAndStatutNot(etudiant, "TERMINE");
+    }
+
+    public long countPendingByEtudiant(Etudiant etudiant) {
+        return devoirRepository.countByCoursEtudiantAndStatutNot(etudiant, "TERMINE");
     }
 }
