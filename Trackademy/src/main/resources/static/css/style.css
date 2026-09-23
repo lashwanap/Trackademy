@@ -1336,6 +1336,16 @@ body.auth-body {
 }
 .auth-footer a:hover { color: var(--primary-dark); }
 
+.auth-forgot {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+}
+.auth-forgot:hover { color: var(--primary-dark); }
+
 /* Responsive auth + sidebar logout */
 @media (max-width: 600px) {
     .auth-card,

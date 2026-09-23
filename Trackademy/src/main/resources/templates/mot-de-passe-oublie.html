@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mot de passe oublié — Trackademy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-body">
+
+<div class="auth-page">
+    <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Trackademy</span>
+        </div>
+
+        <h1 class="auth-title">Mot de passe oublié</h1>
+        <p class="auth-sub">Entrez votre courriel pour recevoir un lien de réinitialisation</p>
+
+        <div class="auth-alert auth-alert-success"
+             th:if="${succes != null}" th:text="${succes}"></div>
+
+        <div class="auth-alert auth-alert-error"
+             th:if="${erreur != null}" th:text="${erreur}"></div>
+
+        <form th:action="@{/mot-de-passe-oublie}" method="post" class="auth-form">
+
+            <div class="auth-field">
+                <label for="email">
+                    <i class="fa-solid fa-envelope"></i> Adresse courriel
+                </label>
+                <input type="email" id="email" name="email"
+                       placeholder="votre@email.com" required autocomplete="email">
+            </div>
+
+            <button type="submit" class="auth-btn">
+                <i class="fa-solid fa-paper-plane"></i> Envoyer le lien
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            <a th:href="@{/connexion}">Retour à la connexion</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

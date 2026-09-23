@@ -1,6 +1,7 @@
 package com.elpzang.trackademy.entite;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "etudiante")
@@ -34,6 +35,12 @@ public class Etudiant {
     @Column(name = "provider")
     private String provider = "LOCAL";
 
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "reset_token_expiration")
+    private LocalDateTime resetTokenExpiration;
+
     public Etudiant() {}
 
     public int getId() { return id; }
@@ -66,4 +73,10 @@ public class Etudiant {
 
     public String getProvider() { return provider; }
     public void setProvider(String provider) { this.provider = provider; }
+
+    public String getResetToken() { return resetToken; }
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
+
+    public LocalDateTime getResetTokenExpiration() { return resetTokenExpiration; }
+    public void setResetTokenExpiration(LocalDateTime resetTokenExpiration) { this.resetTokenExpiration = resetTokenExpiration; }
 }

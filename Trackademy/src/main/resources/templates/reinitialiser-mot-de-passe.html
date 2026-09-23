@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réinitialiser le mot de passe — Trackademy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-body">
+
+<div class="auth-page">
+    <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Trackademy</span>
+        </div>
+
+        <h1 class="auth-title">Nouveau mot de passe</h1>
+        <p class="auth-sub">Choisissez un nouveau mot de passe pour votre compte</p>
+
+        <div class="auth-alert auth-alert-error"
+             th:if="${erreur != null}" th:text="${erreur}"></div>
+
+        <form th:action="@{/reinitialiser-mot-de-passe}" method="post" class="auth-form">
+
+            <input type="hidden" name="token" th:value="${token}">
+
+            <div class="auth-field">
+                <label for="motDePasse">
+                    <i class="fa-solid fa-lock"></i> Nouveau mot de passe
+                </label>
+                <input type="password" id="motDePasse" name="motDePasse"
+                       placeholder="Min. 6 caractères" required autocomplete="new-password" minlength="6">
+            </div>
+
+            <div class="auth-field">
+                <label for="motDePasseConfirm">
+                    <i class="fa-solid fa-lock"></i> Confirmer le mot de passe
+                </label>
+                <input type="password" id="motDePasseConfirm" name="motDePasseConfirm"
+                       placeholder="Répétez le mot de passe" required autocomplete="new-password" minlength="6">
+            </div>
+
+            <button type="submit" class="auth-btn">
+                <i class="fa-solid fa-key"></i> Réinitialiser le mot de passe
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            <a th:href="@{/connexion}">Retour à la connexion</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

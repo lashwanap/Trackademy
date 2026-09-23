@@ -5,6 +5,7 @@ import com.elpzang.trackademy.service.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,9 @@ public class ProfilController {
 
     @Autowired
     private EtudiantService etudiantService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/profil")
     public String profilPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -52,6 +56,41 @@ public class ProfilController {
         etudiant.setPhotoProfil(avatarUrl);
         etudiantService.save(etudiant);
         redirectAttributes.addFlashAttribute("succes", "Photo de profil mise à jour !");
+        return "redirect:/profil";
+    }
+
+    @PostMapping("/profil/mot-de-passe")
+    public String changerMotDePasse(
+            @RequestParam(required = false) String ancienMotDePasse,
+            @RequestParam String nouveauMotDePasse,
+            @RequestParam String nouveauMotDePasseConfirm,
+            @AuthenticationPrincipal UserDetails userDetails,
+            RedirectAttributes redirectAttributes) {
+
+        Etudiant etudiant = etudiantService.findByEmail(userDetails.getUsername());
+
+        boolean possedeDejaUnMotDePasse = etudiant.getMotDePasse() != null;
+
+        if (possedeDejaUnMotDePasse &&
+                (ancienMotDePasse == null || !passwordEncoder.matches(ancienMotDePasse, etudiant.getMotDePasse()))) {
+            redirectAttributes.addFlashAttribute("erreurMotDePasse", "Mot de passe actuel incorrect.");
+            return "redirect:/profil";
+        }
+
+        if (nouveauMotDePasse.length() < 6) {
+            redirectAttributes.addFlashAttribute("erreurMotDePasse", "Le nouveau mot de passe doit contenir au moins 6 caractères.");
+            return "redirect:/profil";
+        }
+
+        if (!nouveauMotDePasse.equals(nouveauMotDePasseConfirm)) {
+            redirectAttributes.addFlashAttribute("erreurMotDePasse", "Les nouveaux mots de passe ne correspondent pas.");
+            return "redirect:/profil";
+        }
+
+        etudiant.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
+        etudiantService.save(etudiant);
+
+        redirectAttributes.addFlashAttribute("succes", "Mot de passe mis à jour avec succès !");
         return "redirect:/profil";
     }
 }

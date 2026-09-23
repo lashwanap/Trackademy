@@ -28,4 +28,8 @@ public class EtudiantService {
     public Etudiant findByEmail(String email) {
         return etudiantRepository.findByEmail(email).orElse(null);
     }
+
+    public Etudiant findByResetToken(String resetToken) {
+        return etudiantRepository.findByResetToken(resetToken).orElse(null);
+    }
 }
