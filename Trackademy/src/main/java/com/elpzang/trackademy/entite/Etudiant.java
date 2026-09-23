@@ -31,6 +31,9 @@ public class Etudiant {
     @Column(name = "photo_profil")
     private String photoProfil;
 
+    @Column(name = "provider")
+    private String provider = "LOCAL";
+
     public Etudiant() {}
 
     public int getId() { return id; }
@@ -60,4 +63,7 @@ public class Etudiant {
     public String getPhotoProfilUrl() {
         return photoProfil != null ? photoProfil : "https://i.pravatar.cc/160?img=47";
     }
+
+    public String getProvider() { return provider; }
+    public void setProvider(String provider) { this.provider = provider; }
 }
