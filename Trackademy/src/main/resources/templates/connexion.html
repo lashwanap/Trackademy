@@ -56,7 +56,15 @@
                 <i class="fa-solid fa-right-to-bracket"></i> Se connecter
             </button>
 
+            <a th:href="@{/mot-de-passe-oublie}" class="auth-forgot">Mot de passe oublié ?</a>
+
         </form>
+
+        <div class="auth-divider"><span>ou</span></div>
+
+        <a th:href="@{/oauth2/authorization/google}" class="auth-btn auth-btn-google">
+            <i class="fa-brands fa-google"></i> Continuer avec Google
+        </a>
 
         <div class="auth-footer">
             Pas encore de compte ?

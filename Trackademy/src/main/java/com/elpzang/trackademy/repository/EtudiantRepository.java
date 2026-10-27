@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface EtudiantRepository extends JpaRepository<Etudiant, Integer> {
 
     Optional<Etudiant> findByEmail(String email);
+
+    Optional<Etudiant> findByResetToken(String resetToken);
 }
